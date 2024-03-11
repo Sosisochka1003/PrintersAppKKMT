@@ -12,8 +12,8 @@ using PrintersApp;
 namespace PrintersApp.Migrations
 {
     [DbContext(typeof(ContextDataBase))]
-    [Migration("20240211192425_klema4")]
-    partial class klema4
+    [Migration("20240311122230_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,7 +78,7 @@ namespace PrintersApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CartridgeId")
+                    b.Property<int>("InventoryNumber")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -87,9 +87,30 @@ namespace PrintersApp.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Printers", "PrinterApp");
+                });
+
+            modelBuilder.Entity("PrintersApp.ContextDataBase+PrinterCartridge", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CartridgeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("PrinterId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("CartridgeId");
 
-                    b.ToTable("Printers", "PrinterApp");
+                    b.HasIndex("PrinterId");
+
+                    b.ToTable("PrinterCartridges", "PrinterApp");
                 });
 
             modelBuilder.Entity("PrintersApp.ContextDataBase+PrinterInRoom", b =>
@@ -155,15 +176,23 @@ namespace PrintersApp.Migrations
                     b.Navigation("CartridgeObject");
                 });
 
-            modelBuilder.Entity("PrintersApp.ContextDataBase+Printer", b =>
+            modelBuilder.Entity("PrintersApp.ContextDataBase+PrinterCartridge", b =>
                 {
-                    b.HasOne("PrintersApp.ContextDataBase+Cartridge", "CartridgeObject")
+                    b.HasOne("PrintersApp.ContextDataBase+Cartridge", "Cartridge")
                         .WithMany()
                         .HasForeignKey("CartridgeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CartridgeObject");
+                    b.HasOne("PrintersApp.ContextDataBase+Printer", "Printer")
+                        .WithMany()
+                        .HasForeignKey("PrinterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cartridge");
+
+                    b.Navigation("Printer");
                 });
 
             modelBuilder.Entity("PrintersApp.ContextDataBase+PrinterInRoom", b =>

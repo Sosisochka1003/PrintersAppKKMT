@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PrintersApp.Migrations
 {
     /// <inheritdoc />
-    public partial class klema1 : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,6 +28,21 @@ namespace PrintersApp.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cartridges", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Printers",
+                schema: "PrinterApp",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    InventoryNumber = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Printers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -54,23 +69,30 @@ namespace PrintersApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Printers",
+                name: "PrinterCartridges",
                 schema: "PrinterApp",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false),
+                    PrinterId = table.Column<int>(type: "integer", nullable: false),
                     CartridgeId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Printers", x => x.Id);
+                    table.PrimaryKey("PK_PrinterCartridges", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Printers_Cartridges_CartridgeId",
+                        name: "FK_PrinterCartridges_Cartridges_CartridgeId",
                         column: x => x.CartridgeId,
                         principalSchema: "PrinterApp",
                         principalTable: "Cartridges",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_PrinterCartridges_Printers_PrinterId",
+                        column: x => x.PrinterId,
+                        principalSchema: "PrinterApp",
+                        principalTable: "Printers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -105,9 +127,8 @@ namespace PrintersApp.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PrinterId = table.Column<int>(type: "integer", nullable: false),
-                    Printer = table.Column<int>(type: "integer", nullable: false),
+                    Room = table.Column<string>(type: "text", nullable: false),
                     CartridgeId = table.Column<int>(type: "integer", nullable: false),
-                    Count = table.Column<int>(type: "integer", nullable: false),
                     ShipmentDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -121,8 +142,8 @@ namespace PrintersApp.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Shipments_Printers_Printer",
-                        column: x => x.Printer,
+                        name: "FK_Shipments_Printers_PrinterId",
+                        column: x => x.PrinterId,
                         principalSchema: "PrinterApp",
                         principalTable: "Printers",
                         principalColumn: "Id",
@@ -136,16 +157,22 @@ namespace PrintersApp.Migrations
                 column: "CartridgeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PrinterCartridges_CartridgeId",
+                schema: "PrinterApp",
+                table: "PrinterCartridges",
+                column: "CartridgeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PrinterCartridges_PrinterId",
+                schema: "PrinterApp",
+                table: "PrinterCartridges",
+                column: "PrinterId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PrinterInRooms_PrinterId",
                 schema: "PrinterApp",
                 table: "PrinterInRooms",
                 column: "PrinterId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Printers_CartridgeId",
-                schema: "PrinterApp",
-                table: "Printers",
-                column: "CartridgeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shipments_CartridgeId",
@@ -154,10 +181,10 @@ namespace PrintersApp.Migrations
                 column: "CartridgeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Shipments_Printer",
+                name: "IX_Shipments_PrinterId",
                 schema: "PrinterApp",
                 table: "Shipments",
-                column: "Printer");
+                column: "PrinterId");
         }
 
         /// <inheritdoc />
@@ -165,6 +192,10 @@ namespace PrintersApp.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Commings",
+                schema: "PrinterApp");
+
+            migrationBuilder.DropTable(
+                name: "PrinterCartridges",
                 schema: "PrinterApp");
 
             migrationBuilder.DropTable(
@@ -176,11 +207,11 @@ namespace PrintersApp.Migrations
                 schema: "PrinterApp");
 
             migrationBuilder.DropTable(
-                name: "Printers",
+                name: "Cartridges",
                 schema: "PrinterApp");
 
             migrationBuilder.DropTable(
-                name: "Cartridges",
+                name: "Printers",
                 schema: "PrinterApp");
         }
     }

@@ -36,25 +36,25 @@ namespace PrintersApp.Windows
                 return;
             }
             ComboBoxPrinter.IsEnabled = true;
-            var Printers = ctx.PrinterInRooms.Where(p => p.Room == ((TextBox)sender).Text).Join(ctx.Printers,
-                            pr => pr.PrinterId,
-                            p => p.Id,
-                            (pr,p) => new Printer
-                            {
-                                Id = p.Id,
-                                Name = p.Name,
-                                CartridgeId = p.CartridgeId,
-                                CartridgeObject = p.CartridgeObject,
-                            }).ToList();
-            ComboBoxPrinter.ItemsSource = Printers;
-            ComboBoxPrinter.SelectedItem = Printers.FirstOrDefault();
+            //var Printers = ctx.PrinterInRooms.Where(p => p.Room == ((TextBox)sender).Text).Join(ctx.Printers,
+            //                pr => pr.PrinterId,
+            //                p => p.Id,
+            //                (pr,p) => new Printer
+            //                {
+            //                    Id = p.Id,
+            //                    Name = p.Name,
+            //                    CartridgeId = p.CartridgeId,
+            //                    CartridgeObject = p.CartridgeObject,
+            //                }).ToList();
+            //ComboBoxPrinter.ItemsSource = Printers;
+            //ComboBoxPrinter.SelectedItem = Printers.FirstOrDefault();
         }
 
         private void ComboBoxPrinter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             //ComboBoxCartridge.Items.Clear();
             //ComboBoxCartridge.Items.Add(((Printer)ComboBoxPrinter.SelectedItem).CartridgeObject);
-            ComboBoxCartridge.SelectedItem = ((Printer)ComboBoxPrinter.SelectedItem).CartridgeObject;
+            //ComboBoxCartridge.SelectedItem = ((Printer)ComboBoxPrinter.SelectedItem).CartridgeObject;
         }
 
         private void CheckBoxAutoSelect_Unchecked(object sender, RoutedEventArgs e)
@@ -68,8 +68,8 @@ namespace PrintersApp.Windows
             {
                 return;
             }
-            ComboBoxCartridge.SelectedItem = ((Printer)ComboBoxPrinter.SelectedItem).CartridgeObject;
-            ComboBoxCartridge.IsEnabled = false;
+            //ComboBoxCartridge.SelectedItem = ((Printer)ComboBoxPrinter.SelectedItem).CartridgeObject;
+            //ComboBoxCartridge.IsEnabled = false;
         }
 
         private void ButtonShipment_Click(object sender, RoutedEventArgs e)
@@ -78,15 +78,15 @@ namespace PrintersApp.Windows
             //var printer = (Printer)ComboBoxPrinter.SelectedItem;
             //var cartridge = (Cartridge)ComboBoxCartridge.SelectedItem;
 
-            ctx.Shipments.Add(new Shipment
-            {
-                PrinterId = ((Printer)ComboBoxPrinter.SelectedItem).Id,
-                PrinterObject = ctx.Printers.FirstOrDefault(p => p.Id == ((Printer)ComboBoxPrinter.SelectedItem).Id),
-                Room = TextBoxRoom.Text,
-                CartridgeId = ((Cartridge)ComboBoxCartridge.SelectedItem).Id,
-                CartridgeObject = ctx.Cartridges.FirstOrDefault(p => p.Id == ((Cartridge)ComboBoxCartridge.SelectedItem).Id),
-                ShipmentDate = DateTime.UtcNow
-            });
+            //ctx.Shipments.Add(new Shipment
+            //{
+            //    PrinterId = ((Printer)ComboBoxPrinter.SelectedItem).Id,
+            //    PrinterObject = ctx.Printers.FirstOrDefault(p => p.Id == ((Printer)ComboBoxPrinter.SelectedItem).Id),
+            //    Room = TextBoxRoom.Text,
+            //    CartridgeId = ((Cartridge)ComboBoxCartridge.SelectedItem).Id,
+            //    CartridgeObject = ctx.Cartridges.FirstOrDefault(p => p.Id == ((Cartridge)ComboBoxCartridge.SelectedItem).Id),
+            //    ShipmentDate = DateTime.UtcNow
+            //});
             ctx.Cartridges.FirstOrDefault(p => p.Id == ((Cartridge)ComboBoxCartridge.SelectedItem).Id).StockCount -= 1;
             ctx.SaveChanges();
             this.Close();

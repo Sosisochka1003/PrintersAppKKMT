@@ -40,30 +40,30 @@ namespace PrintersApp.Windows
             TextBoxName.Text = NewPrinter.Name;
             TextBoxRoom.Text = NewPrinter.Room;
             ComboBoxCartridges.ItemsSource = ctx.Cartridges.ToList();
-            ComboBoxCartridges.SelectedItem = CurrentPrinter.CartridgeObject;
+            //ComboBoxCartridges.SelectedItem = CurrentPrinter.CartridgeObject;
         }
 
         private void ButtonConfirm_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentPrinter == null && inRoom == null)
             {
-                var newPrinter = new Printer
-                {
-                    Name = TextBoxName.Text,
-                    CartridgeId = ((Cartridge)ComboBoxCartridges.SelectedItem).Id,
-                    CartridgeObject = ((Cartridge)ComboBoxCartridges.SelectedItem)
-                };
-                ctx.Printers.Add(newPrinter);
-                ctx.SaveChanges();
-                ctx.PrinterInRooms.Add(new PrinterInRoom { PrinterId = newPrinter.Id, PrinterObject = newPrinter, Room = TextBoxRoom.Text });
-                ctx.SaveChanges();
+                //var newPrinter = new Printer
+                //{
+                //    Name = TextBoxName.Text,
+                //    CartridgeId = ((Cartridge)ComboBoxCartridges.SelectedItem).Id,
+                //    CartridgeObject = ((Cartridge)ComboBoxCartridges.SelectedItem)
+                //};
+                //ctx.Printers.Add(newPrinter);
+                //ctx.SaveChanges();
+                //ctx.PrinterInRooms.Add(new PrinterInRoom { PrinterId = newPrinter.Id, PrinterObject = newPrinter, Room = TextBoxRoom.Text });
+                //ctx.SaveChanges();
                 this.Close();
                 return;
             }
 
             CurrentPrinter.Name = TextBoxName.Text;
-            CurrentPrinter.CartridgeId = ((Cartridge)ComboBoxCartridges.SelectedItem).Id;
-            CurrentPrinter.CartridgeObject = ((Cartridge)ComboBoxCartridges.SelectedItem);
+            //CurrentPrinter.CartridgeId = ((Cartridge)ComboBoxCartridges.SelectedItem).Id;
+            //CurrentPrinter.CartridgeObject = ((Cartridge)ComboBoxCartridges.SelectedItem);
             inRoom.Room = TextBoxRoom.Text;
 
             ctx.Printers.Update(CurrentPrinter);

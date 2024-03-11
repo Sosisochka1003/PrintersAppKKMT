@@ -30,18 +30,18 @@ namespace PrintersApp.Windows
             InitializeComponent();
             ctx = globalctx;
 
-            test = ctx.Printers.Join(ctx.PrinterInRooms,
-                p => p.Id,
-                pr => pr.PrinterId,
-                (p, pr) => new FilterItems
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    CartridgeName = p.CartridgeObject.Name,
-                    Room = pr.Room,
-                }).ToList();
+           // test = ctx.Printers.Join(ctx.PrinterInRooms,
+           //     p => p.Id,
+           //     pr => pr.PrinterId,
+           //     (p, pr) => new FilterItems
+           //     {
+           //         Id = p.Id,
+           //         Name = p.Name,
+           //         CartridgeName = p.CartridgeObject.Name,
+           //         Room = pr.Room,
+           //     }).ToList();
 
-           DataGridPrinters.ItemsSource = test;
+           //DataGridPrinters.ItemsSource = test;
         }
 
 
@@ -71,16 +71,16 @@ namespace PrintersApp.Windows
         {
             if (e.Key == Key.F5)
             {
-                DataGridPrinters.ItemsSource = ctx.Printers.Join(ctx.PrinterInRooms,
-                p => p.Id,
-                pr => pr.PrinterId,
-                (p, pr) => new FilterItems
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    CartridgeName = p.CartridgeObject.Name,
-                    Room = pr.Room,
-                }).ToList();
+                //DataGridPrinters.ItemsSource = ctx.Printers.Join(ctx.PrinterInRooms,
+                //p => p.Id,
+                //pr => pr.PrinterId,
+                //(p, pr) => new FilterItems
+                //{
+                //    Id = p.Id,
+                //    Name = p.Name,
+                //    CartridgeName = p.CartridgeObject.Name,
+                //    Room = pr.Room,
+                //}).ToList();
             }
         }
 
@@ -98,16 +98,16 @@ namespace PrintersApp.Windows
             }
             ctx.Printers.Remove(deleteItemId);
             ctx.SaveChanges();
-            DataGridPrinters.ItemsSource = ctx.Printers.Join(ctx.PrinterInRooms,
-                p => p.Id,
-                pr => pr.PrinterId,
-                (p, pr) => new FilterItems
-                {
-                    Id = p.Id,
-                    Name = p.Name,
-                    CartridgeName = p.CartridgeObject.Name,
-                    Room = pr.Room,
-                }).ToList();
+            //DataGridPrinters.ItemsSource = ctx.Printers.Join(ctx.PrinterInRooms,
+            //    p => p.Id,
+            //    pr => pr.PrinterId,
+            //    (p, pr) => new FilterItems
+            //    {
+            //        Id = p.Id,
+            //        Name = p.Name,
+            //        CartridgeName = p.CartridgeObject.Name,
+            //        Room = pr.Room,
+            //    }).ToList();
         }
 
         private void MenuItemUpdate_Click(object sender, RoutedEventArgs e)

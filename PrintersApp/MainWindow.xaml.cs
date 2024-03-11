@@ -28,8 +28,10 @@ namespace PrintersApp
 
         private void ButtonPrintes_Click(object sender, RoutedEventArgs e)
         {
-            var PrintersWindow = new Printers(ctx);
-            PrintersWindow.Show();
+            //var PrintersWindow = new Printers(ctx);
+            //PrintersWindow.Show();
+            var newMenu = new NewMainWindow();
+            newMenu.Show();
         }
 
         private void ButtonCartridges_Click(object sender, RoutedEventArgs e)

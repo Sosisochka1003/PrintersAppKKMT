@@ -1,0 +1,31 @@
+﻿<Window x:Class="PrintersApp.Windows.Cartridges"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PrintersApp.Windows"
+        mc:Ignorable="d"
+        Title="Все картриджи" Height="450" Width="800" KeyDown="Window_KeyDown">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Поиск"/>
+                <TextBox x:Name="TextBoxSearch" TextChanged="TextBoxSearch_TextChanged" Width="200"/>
+                <Button x:Name="ButtonAddCartridge" Content="Добавить картридж" Click="ButtonAddCartridge_Click"/>
+            </StackPanel>
+            <DataGrid x:Name="DataGridCartridges" AutoGenerateColumns="False">
+                <DataGrid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="MenuItemUpdate" Header="Редактировать" Click="MenuItemUpdate_Click"/>
+                        <MenuItem x:Name="MenuItemDelete" Header="Удалить" Click="MenuItemDelete_Click"/>
+                    </ContextMenu>
+                </DataGrid.ContextMenu>
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Код" Binding="{Binding Path=Id}"/>
+                    <DataGridTextColumn Header="Наименование" Binding="{Binding Path=Name}"/>
+                    <DataGridTextColumn Header="Кол-во на складе" Binding="{Binding Path=StockCount}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Window>

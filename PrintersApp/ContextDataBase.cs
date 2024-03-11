@@ -17,8 +17,8 @@ namespace PrintersApp
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");
-            optionsBuilder.UseSqlite("Filename=Printer.db");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");
+            //optionsBuilder.UseSqlite("Filename=Printer.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -28,6 +28,7 @@ namespace PrintersApp
         }
 
         public DbSet<Cartridge> Cartridges { get; set; }
+        public DbSet<PrinterCartridge> PrinterCartridges { get; set; }
         public DbSet<PrinterInRoom> PrinterInRooms { get; set; }
         public DbSet<Printer> Printers { get; set; }
         public DbSet<Comming> Commings { get; set; }
@@ -38,9 +39,7 @@ namespace PrintersApp
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
             public string Name { get; set; }
-            [ForeignKey(nameof(Cartridge))]
-            public int CartridgeId { get; set; }
-            public Cartridge CartridgeObject { get; set; }
+            public int InventoryNumber { get; set; }
         }
 
         public class PrinterInRoom
@@ -88,7 +87,14 @@ namespace PrintersApp
 
         public class PrinterCartridge
         {
+            [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
+            [ForeignKey(nameof(Printer))]
+            public int PrinterId { get; set; }
+            public Printer Printer { get; set; }
+            [ForeignKey(nameof(Cartridge))]
+            public int CartridgeId { get; set; }
+            public Cartridge Cartridge { get; set; }
         }
     }
 }

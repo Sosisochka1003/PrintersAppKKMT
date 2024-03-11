@@ -85,5 +85,10 @@ namespace PrintersApp
             public Cartridge CartridgeObject { get; set; }
             public DateTime ShipmentDate { get; set;}
         }
+
+        public class PrinterCartridge
+        {
+            public int Id { get; set; }
+        }
     }
 }

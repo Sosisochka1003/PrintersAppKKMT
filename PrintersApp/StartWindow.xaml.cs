@@ -16,15 +16,19 @@ using System.Windows.Shapes;
 namespace PrintersApp
 {
     /// <summary>
-    /// Логика взаимодействия для NewMainWindow.xaml
+    /// Логика взаимодействия для StartWindow.xaml
     /// </summary>
-    public partial class NewMainWindow : Window
+    public partial class StartWindow : Window
     {
-        public NewMainWindow()
+        ContextDataBase ctx = new ContextDataBase();
+        public StartWindow()
         {
             InitializeComponent();
-            var page = new PrintersPage();
-            MainFrame.Navigate(page);
+        }
+
+        private void MainControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+           
         }
     }
 }

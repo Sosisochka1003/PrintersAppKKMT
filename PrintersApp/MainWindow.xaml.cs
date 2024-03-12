@@ -30,14 +30,16 @@ namespace PrintersApp
         {
             //var PrintersWindow = new Printers(ctx);
             //PrintersWindow.Show();
-            var newMenu = new NewMainWindow();
-            newMenu.Show();
+            //var newMenu = new NewMainWindow();
+            //newMenu.Show();
         }
 
         private void ButtonCartridges_Click(object sender, RoutedEventArgs e)
         {
-            var CartridgesWindow = new Cartridges(ctx);
-            CartridgesWindow.Show();
+            //var CartridgesWindow = new Cartridges(ctx);
+            //CartridgesWindow.Show();
+            var cartridge = new StartWindow();
+            cartridge.Show();
         }
 
         private void ButtonComming_Click(object sender, RoutedEventArgs e)

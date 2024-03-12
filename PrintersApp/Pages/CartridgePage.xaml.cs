@@ -20,9 +20,24 @@ namespace PrintersApp.Pages
     /// </summary>
     public partial class CartridgePage : Page
     {
-        public CartridgePage()
+        ContextDataBase ctx;
+        public CartridgePage(ContextDataBase ctx)
         {
             InitializeComponent();
+            this.ctx = ctx;
+            DataGridCartridges.ItemsSource = ctx.Cartridges.ToList();
+        }
+
+        private void ButtonShowGrid_Click(object sender, RoutedEventArgs e)
+        {
+            if (GridAddEditElement.Visibility == Visibility.Hidden)
+            {
+                GridAddEditElement.Visibility = Visibility.Visible;
+            }
+            else if(GridAddEditElement.Visibility == Visibility.Visible)
+            {
+                GridAddEditElement.Visibility = Visibility.Hidden;
+            }
         }
     }
 }

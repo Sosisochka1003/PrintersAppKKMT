@@ -1,0 +1,32 @@
+﻿<Window
+    x:Class="PrintersApp.StartWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:PrintersApp"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="StartWindow"
+    Width="800"
+    Height="450"
+    mc:Ignorable="d">
+
+    <Grid>
+        <TabControl x:Name="MainControl" SelectionChanged="MainControl_SelectionChanged">
+            <TabItem x:Name="TabItemCartridge" Header="Картриджи">
+                <TabItem.Content>
+                    <Frame x:Name="FrameCartridge" />
+                </TabItem.Content>
+            </TabItem>
+            <TabItem x:Name="TabItemPrinters" Header="Принтеры">
+                <TabItem.Content>
+                    <Frame x:Name="FramePrinters" />
+                </TabItem.Content>
+            </TabItem>
+            <TabItem Header="Отчеты">
+                <TabItem.Content>
+                    <Frame x:Name="FrameReports" />
+                </TabItem.Content>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

@@ -6,24 +6,62 @@
     xmlns:local="clr-namespace:PrintersApp.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="CartridgePage"
-    d:DesignHeight="450"
+    d:DesignHeight="380"
     d:DesignWidth="800"
     mc:Ignorable="d">
 
     <Grid Background="White">
-        <StackPanel>
+        <StackPanel Margin="3,3,3,3">
             <StackPanel Orientation="Horizontal">
-                <TextBox Text="Поиск" />
-                <Button Content="Фильтр" />
-                <CheckBox Content="Фильтр 1" />
+                <TextBox Margin="0,0,5,0" Text="Поиск" />
+                <Button Margin="0,0,5,0" Content="Фильтр" />
+                <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
+                <Button
+                    x:Name="ButtonShowGrid"
+                    Click="ButtonShowGrid_Click"
+                    Content="Добавить" />
             </StackPanel>
-            <DataGrid>
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Код" />
-                    <DataGridTextColumn Header="Наименование" />
-                    <DataGridTextColumn Header="Инвентарный номер" />
-                </DataGrid.Columns>
-            </DataGrid>
+            <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                <DataGrid
+                    x:Name="DataGridCartridges"
+                    Margin="0,5,0,0"
+                    AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding Path=Id}" Header="№" />
+                        <DataGridTextColumn
+                            Width="200"
+                            Binding="{Binding Path=Name}"
+                            Header="Наименование" />
+                        <DataGridTextColumn
+                            Width="150"
+                            Binding="{Binding Path=StockCount}"
+                            Header="Кол-во на складе" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <Grid x:Name="GridAddEditElement" Visibility="Hidden">
+                    <StackPanel Width="200" Margin="10,0,0,0">
+                        <TextBox
+                            Margin="0,0,0,5"
+                            Style="{StaticResource placeHolder}"
+                            Tag="Код"
+                            TextWrapping="Wrap" />
+                        <TextBox
+                            Margin="0,0,0,5"
+                            Style="{StaticResource placeHolder}"
+                            Tag="Наименование"
+                            TextWrapping="Wrap" />
+                        <TextBox
+                            Margin="0,0,0,5"
+                            Style="{StaticResource placeHolder}"
+                            Tag="Кол-во на складе"
+                            TextWrapping="Wrap" />
+                        <Button
+                            x:Name="ButtonSubmit"
+                            HorizontalAlignment="Center"
+                            Content="Сохранить" />
+                    </StackPanel>
+                </Grid>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Page>

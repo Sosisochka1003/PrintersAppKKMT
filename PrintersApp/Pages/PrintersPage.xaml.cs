@@ -20,8 +20,10 @@ namespace PrintersApp.Pages
     /// </summary>
     public partial class PrintersPage : Page
     {
-        public PrintersPage()
+        ContextDataBase ctx;
+        public PrintersPage(ContextDataBase ctx)
         {
+            this.ctx = ctx;
             InitializeComponent();
         }
     }

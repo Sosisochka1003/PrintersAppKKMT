@@ -21,14 +21,14 @@ namespace PrintersApp
     public partial class StartWindow : Window
     {
         ContextDataBase ctx = new ContextDataBase();
+        
         public StartWindow()
         {
             InitializeComponent();
+            FrameCartridge.Navigate(new CartridgePage(ctx));
+            FramePrinters.Navigate(new PrintersPage(ctx));
         }
 
-        private void MainControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-           
-        }
+        
     }
 }

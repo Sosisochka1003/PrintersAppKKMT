@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security.Policy;
 
 namespace PrintersApp
 {
@@ -27,12 +28,21 @@ namespace PrintersApp
         public DbSet<Comming> Commings { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
 
+        public enum VarLocation
+        {
+            Первый,
+            Второй,
+            ККМТ,
+            ТТД
+        }
+
         public class Printer
         {
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
             public string Name { get; set; }
             public int InventoryNumber { get; set; }
+            public VarLocation Location { get; set; }
         }
 
         public class PrinterInRoom
@@ -51,6 +61,7 @@ namespace PrintersApp
             public int Id { get; set; }
             public string Name { get; set; }
             public int StockCount { get; set; }
+            public VarLocation Location { get; set; }
         }
 
         public class Comming

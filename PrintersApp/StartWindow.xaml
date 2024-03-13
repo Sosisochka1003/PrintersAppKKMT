@@ -11,7 +11,7 @@
     mc:Ignorable="d">
 
     <Grid>
-        <TabControl x:Name="MainControl" SelectionChanged="MainControl_SelectionChanged">
+        <TabControl x:Name="MainControl">
             <TabItem x:Name="TabItemCartridge" Header="Картриджи">
                 <TabItem.Content>
                     <Frame x:Name="FrameCartridge" />

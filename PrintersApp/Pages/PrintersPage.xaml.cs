@@ -26,5 +26,17 @@ namespace PrintersApp.Pages
             this.ctx = ctx;
             InitializeComponent();
         }
+
+        private void ButtonAddElement_Click(object sender, RoutedEventArgs e)
+        {
+            if (GridAddEditElement.Visibility == Visibility.Hidden)
+            {
+                GridAddEditElement.Visibility = Visibility.Visible;
+            }
+            else if (GridAddEditElement.Visibility == Visibility.Visible)
+            {
+                GridAddEditElement.Visibility = Visibility.Hidden;
+            }
+        }
     }
 }

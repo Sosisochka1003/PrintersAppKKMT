@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static PrintersApp.ContextDataBase;
 
 namespace PrintersApp.Pages
 {
@@ -21,15 +25,22 @@ namespace PrintersApp.Pages
     public partial class CartridgePage : Page
     {
         ContextDataBase ctx;
+        Cartridge? pickCartridge;
         public CartridgePage(ContextDataBase ctx)
         {
             InitializeComponent();
             this.ctx = ctx;
-            DataGridCartridges.ItemsSource = ctx.Cartridges.ToList();
+            ObservableCollection<Cartridge> allCartridges = new ObservableCollection<Cartridge>(ctx.Cartridges.ToList());
+            DataGridCartridges.ItemsSource = allCartridges;
+            ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
         }
 
         private void ButtonShowGrid_Click(object sender, RoutedEventArgs e)
         {
+            TextBoxName.Text = null;
+            TextBoxStockCount.Text = null;
+            ComboBoxLocation.Text = "Расопложение";
+
             if (GridAddEditElement.Visibility == Visibility.Hidden)
             {
                 GridAddEditElement.Visibility = Visibility.Visible;
@@ -37,6 +48,45 @@ namespace PrintersApp.Pages
             else if(GridAddEditElement.Visibility == Visibility.Visible)
             {
                 GridAddEditElement.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataGridCartridges.SelectedItem == null)
+            {
+                return;
+            }
+            GridAddEditElement.Visibility = Visibility.Visible;
+            pickCartridge = DataGridCartridges.SelectedItem as Cartridge;
+            TextBoxName.Text = pickCartridge?.Name;
+            TextBoxStockCount.Text = pickCartridge?.StockCount.ToString();
+            ComboBoxLocation.SelectedItem = pickCartridge?.Location;
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
+        {
+            if (pickCartridge == null)
+            {
+                Cartridge newCartridge = new Cartridge
+                {
+                    Name = TextBoxName.Text,
+                    StockCount = Convert.ToInt32(TextBoxStockCount.Text),
+                    Location = (VarLocation)ComboBoxLocation.SelectedItem
+                };
+                ctx.SaveChangesAsync();
+            }
+            else if (pickCartridge != null)
+            {
+                pickCartridge.Name = TextBoxName.Text;
+                pickCartridge.StockCount = Convert.ToInt32(TextBoxStockCount.Text);
+                pickCartridge.Location = (VarLocation)ComboBoxLocation.SelectedItem;
+                ctx.SaveChangesAsync();
             }
         }
     }

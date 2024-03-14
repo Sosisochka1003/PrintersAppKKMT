@@ -17,7 +17,7 @@
                 <TextBox Margin="0,0,5,0" Text="Поиск" />
                 <Button Margin="0,0,5,0" Content="Фильтр" />
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
-                <Button Content="Добавить" />
+                <Button x:Name="ButtonAddElement" Click="ButtonAddElement_Click" Content="Добавить" />
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <DataGrid x:Name="DataGridPrinters">
@@ -30,29 +30,26 @@
                 <Grid x:Name="GridAddEditElement" Visibility="Visible">
                     <StackPanel Width="200" Margin="10,0,0,0">
                         <TextBox
-                            Margin="0,0,0,5"
-                            Style="{StaticResource placeHolder}"
-                            Tag="Код"
-                            TextWrapping="Wrap" />
-                        <TextBox
+                            x:Name="TextBoxName"
                             Margin="0,0,0,5"
                             Style="{StaticResource placeHolder}"
                             Tag="Наименование"
                             TextWrapping="Wrap" />
                         <TextBox
+                            x:Name="TextBoxInventoryNumber"
                             Margin="0,0,0,5"
                             Style="{StaticResource placeHolder}"
                             Tag="Инвентарный номер"
                             TextWrapping="Wrap" />
                         <ComboBox
+                            x:Name="ComboBoxLocation"
+                            Margin="0,0,0,5"
                             IsEditable="True"
                             IsReadOnly="True"
-                            Text="Расположение"
-                            TextElement.Foreground="Gray"
-                            TextBlock.Foreground="Gray"
-                            />
+                            Text="Расположение" />
                         <Button
                             x:Name="ButtonSubmit"
+                            Margin="0,0,0,5"
                             HorizontalAlignment="Center"
                             Content="Сохранить" />
                     </StackPanel>

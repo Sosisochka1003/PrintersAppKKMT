@@ -14,9 +14,11 @@
         <StackPanel Margin="3,3,3,3">
             <StackPanel Orientation="Horizontal">
                 <TextBox
+                    x:Name="TextBoxSearch"
+                    TextChanged="TextBoxSearch_TextChanged"
                     Margin="0,0,5,0"
                     Style="{StaticResource placeHolder}"
-                    Tag="Поиск" />
+                    Tag="" />
                 <Button Margin="0,0,5,0" Content="Фильтр" />
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
                 <Button

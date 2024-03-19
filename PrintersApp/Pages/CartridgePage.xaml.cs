@@ -80,15 +80,38 @@ namespace PrintersApp.Pages
                     StockCount = Convert.ToInt32(TextBoxStockCount.Text),
                     Location = (VarLocation)ComboBoxLocation.SelectedItem
                 };
+                ctx.Cartridges.Add(newCartridge);
                 ctx.SaveChanges();
+                pickCartridge = null;
+                return;
             }
-            else if (pickCartridge != null)
+            pickCartridge.Name = TextBoxName.Text;
+            pickCartridge.StockCount = Convert.ToInt32(TextBoxStockCount.Text);
+            pickCartridge.Location = (VarLocation)ComboBoxLocation.SelectedItem;
+            ctx.Cartridges.Update(pickCartridge);
+            ctx.SaveChanges();
+            pickCartridge = null;
+        }
+
+        private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var paramSearchStr = ((TextBox)sender).Text;
+            if (Enum.TryParse<VarLocation>(paramSearchStr, out var paramSearchLocation))
             {
-                pickCartridge.Name = TextBoxName.Text;
-                pickCartridge.StockCount = Convert.ToInt32(TextBoxStockCount.Text);
-                pickCartridge.Location = (VarLocation)ComboBoxLocation.SelectedItem;
-                ctx.SaveChanges();
+                var result = ctx.Cartridges.Where(c => c.Location == paramSearchLocation).ToList();
+                DataGridCartridges.ItemsSource = result;
+                return;
             }
+
+            if (!int.TryParse(paramSearchStr, out int paramSearchNumber))
+            {
+                var result = ctx.Cartridges.Where(c => c.Name.ToLower().Contains(paramSearchStr.ToLower())).ToList();
+                DataGridCartridges.ItemsSource = result;
+                return;
+            }
+
+            var intResult = ctx.Cartridges.Where(c => c.StockCount == paramSearchNumber).ToList();
+            DataGridCartridges.ItemsSource = intResult;
         }
     }
 }

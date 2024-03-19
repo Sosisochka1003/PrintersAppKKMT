@@ -24,6 +24,7 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Path=Id}" Header="Код" />
                         <DataGridTextColumn Binding="{Binding Path=Name}" Header="Наименование" />
+                        <DataGridTextColumn Binding="{Binding Path=Location}" Header="Расположение"/>
                         <DataGridTextColumn Binding="{Binding Path=InventoryNumber}" Header="Инвентарный номер" />
                     </DataGrid.Columns>
                 </DataGrid>
@@ -47,6 +48,16 @@
                             IsEditable="True"
                             IsReadOnly="True"
                             Text="Расположение" />
+                        <ComboBox x:Name="ComboBoxCompabilityPrinters" Margin="0 0 0 5" IsEditable="True" IsReadOnly="True" Text="Совместимые принтеры">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox/>
+                                        <TextBlock/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                         <Button
                             x:Name="ButtonSubmit"
                             Margin="0,0,0,5"

@@ -13,7 +13,10 @@
     <Grid Background="White">
         <StackPanel Margin="3,3,3,3">
             <StackPanel Orientation="Horizontal">
-                <TextBox Margin="0,0,5,0" Text="Поиск" />
+                <TextBox
+                    Margin="0,0,5,0"
+                    Style="{StaticResource placeHolder}"
+                    Tag="Поиск" />
                 <Button Margin="0,0,5,0" Content="Фильтр" />
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
                 <Button
@@ -26,6 +29,7 @@
                     x:Name="DataGridCartridges"
                     Margin="0,5,0,0"
                     AutoGenerateColumns="False"
+                    EnableColumnVirtualization="False"
                     IsReadOnly="True">
                     <DataGrid.ContextMenu>
                         <ContextMenu>

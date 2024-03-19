@@ -40,6 +40,7 @@ namespace PrintersApp.Pages
             TextBoxName.Text = null;
             TextBoxStockCount.Text = null;
             ComboBoxLocation.Text = "Расопложение";
+            pickCartridge = null;
 
             if (GridAddEditElement.Visibility == Visibility.Hidden)
             {
@@ -66,7 +67,7 @@ namespace PrintersApp.Pages
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            ctx.Cartridges.Remove((DataGridCartridges.SelectedItem as Cartridge));
         }
 
         private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
@@ -79,14 +80,14 @@ namespace PrintersApp.Pages
                     StockCount = Convert.ToInt32(TextBoxStockCount.Text),
                     Location = (VarLocation)ComboBoxLocation.SelectedItem
                 };
-                ctx.SaveChangesAsync();
+                ctx.SaveChanges();
             }
             else if (pickCartridge != null)
             {
                 pickCartridge.Name = TextBoxName.Text;
                 pickCartridge.StockCount = Convert.ToInt32(TextBoxStockCount.Text);
                 pickCartridge.Location = (VarLocation)ComboBoxLocation.SelectedItem;
-                ctx.SaveChangesAsync();
+                ctx.SaveChanges();
             }
         }
     }

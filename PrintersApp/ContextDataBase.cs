@@ -1,18 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using System.Security.Policy;
 
 namespace PrintersApp
 {
     public class ContextDataBase : DbContext
     {
+        public ContextDataBase() 
+        {
+            //Database.EnsureCreated();
+        }
+        
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");
-            //optionsBuilder.UseSqlite("Filename=Printer.db");
+            optionsBuilder.UseNpgsql("Host=10.10.104.119;Port=5432;Database=postgres;Username=postgres;Password=123");
+            //optionsBuilder.UseNpgsql("Host=postgres://hiwfvpzk:dpzhqMaC1eRPOchM26Kukc5vOY3J4Z4C@flora.db.elephantsql.com/hiwfvpzk; Port=5432; Database=hiwfvpzk; Username=hiwfvpzk; Password=dpzhqMaC1eRPOchM26Kukc5vOY3J4Z4C");
+            //optionsBuilder.UseSqlite("Data Source=Printer.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -49,13 +60,13 @@ namespace PrintersApp
         {
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
-            public string Room { get; set; }
+            public string? Room { get; set; }
             [ForeignKey(nameof(Printer))]
             public int PrinterId { get; set; }
             public Printer PrinterObject { get; set; }
         }
 
-        public class Cartridge
+        public class Cartridge  
         {
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }

@@ -19,7 +19,7 @@
                     Margin="0,0,5,0"
                     Style="{StaticResource placeHolder}"
                     Tag="" />
-                <Button Margin="0,0,5,0" Content="Фильтр" />
+                <Button x:Name="ButtonFilter" Click="ButtonFilter_Click" Margin="0,0,5,0" Content="Фильтр" />
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
                 <Button
                     x:Name="ButtonShowGrid"
@@ -30,6 +30,7 @@
                 <DataGrid
                     x:Name="DataGridCartridges"
                     Margin="0,5,0,0"
+                    ItemsSource="{Binding Cartridges}"
                     AutoGenerateColumns="False"
                     EnableColumnVirtualization="False"
                     IsReadOnly="True">
@@ -61,7 +62,7 @@
                         <DataGridTextColumn Binding="{Binding Path=Location}" Header="Расположение" />
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid x:Name="GridAddEditElement" Visibility="Visible">
+                <Grid x:Name="GridAddEditElement" Visibility="Hidden">
                     <StackPanel Width="200" Margin="10,0,0,0">
                         <TextBox
                             x:Name="TextBoxName"

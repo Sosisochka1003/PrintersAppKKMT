@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,12 +27,14 @@ namespace PrintersApp.Pages
     {
         ContextDataBase ctx;
         Cartridge? pickCartridge;
+        public BindingList<Cartridge> Cartridges { get; set; } = new BindingList<Cartridge>();
+        
         public CartridgePage(ContextDataBase ctx)
         {
             InitializeComponent();
             this.ctx = ctx;
-            ObservableCollection<Cartridge> allCartridges = new ObservableCollection<Cartridge>(ctx.Cartridges.ToList());
-            DataGridCartridges.ItemsSource = allCartridges;
+            Cartridges = new BindingList<Cartridge>(ctx.Cartridges.ToList());
+            DataGridCartridges.ItemsSource = Cartridges;
             ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
         }
 
@@ -65,32 +68,42 @@ namespace PrintersApp.Pages
             ComboBoxLocation.SelectedItem = pickCartridge?.Location;
         }
 
-        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        private async void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-            ctx.Cartridges.Remove((DataGridCartridges.SelectedItem as Cartridge));
+            if (DataGridCartridges.SelectedItem != null)
+            {
+                var deleteItem = ctx.Cartridges.FirstOrDefault(x => x.Id == (DataGridCartridges.SelectedItem as Cartridge).Id);
+                ctx.Cartridges.Remove(deleteItem);
+                await ctx.SaveChangesAsync();
+                Cartridges.Remove(deleteItem);
+            }
         }
 
-        private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
+        private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
+            if (TextBoxName.Text == null || TextBoxStockCount.Text == null || ComboBoxLocation.Text == "Расположение")
+            {
+                return;
+            }
             if (pickCartridge == null)
             {
-                Cartridge newCartridge = new Cartridge
+                var newCartridge = new Cartridge
                 {
                     Name = TextBoxName.Text,
                     StockCount = Convert.ToInt32(TextBoxStockCount.Text),
                     Location = (VarLocation)ComboBoxLocation.SelectedItem
                 };
                 ctx.Cartridges.Add(newCartridge);
-                ctx.SaveChanges();
-                pickCartridge = null;
-                return;
+                await ctx.SaveChangesAsync();
+                Cartridges.Add(newCartridge);
             }
             pickCartridge.Name = TextBoxName.Text;
             pickCartridge.StockCount = Convert.ToInt32(TextBoxStockCount.Text);
             pickCartridge.Location = (VarLocation)ComboBoxLocation.SelectedItem;
             ctx.Cartridges.Update(pickCartridge);
-            ctx.SaveChanges();
-            pickCartridge = null;
+            await ctx.SaveChangesAsync();
+            Cartridges.ResetItem(Cartridges.IndexOf(pickCartridge));
+            GridAddEditElement.Visibility = Visibility.Hidden;
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
@@ -112,6 +125,11 @@ namespace PrintersApp.Pages
 
             var intResult = ctx.Cartridges.Where(c => c.StockCount == paramSearchNumber).ToList();
             DataGridCartridges.ItemsSource = intResult;
+        }
+
+        private void ButtonFilter_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

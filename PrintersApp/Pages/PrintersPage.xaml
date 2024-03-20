@@ -17,15 +17,25 @@
                 <TextBox Margin="0,0,5,0" Text="Поиск" />
                 <Button Margin="0,0,5,0" Content="Фильтр" />
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
-                <Button x:Name="ButtonAddElement" Click="ButtonAddElement_Click" Content="Добавить" />
+                <Button
+                    x:Name="ButtonAddElement"
+                    Click="ButtonAddElement_Click"
+                    Content="Добавить" />
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <DataGrid x:Name="DataGridPrinters">
+                <DataGrid x:Name="DataGridPrinters" AutoGenerateColumns="False">
+                    <DataGrid.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Редактировать" />
+                            <MenuItem Header="Удалить" />
+                        </ContextMenu>
+                    </DataGrid.ContextMenu>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=Id}" Header="Код" />
-                        <DataGridTextColumn Binding="{Binding Path=Name}" Header="Наименование" />
-                        <DataGridTextColumn Binding="{Binding Path=Location}" Header="Расположение"/>
-                        <DataGridTextColumn Binding="{Binding Path=InventoryNumber}" Header="Инвентарный номер" />
+                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.Id, Mode=TwoWay}" Header="Код" />
+                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.Name, Mode=TwoWay}" Header="Наименование" />
+                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.Location, Mode=TwoWay}" Header="Расположение" />
+                        <DataGridTextColumn Binding="{Binding Path=Room, Mode=TwoWay}" Header="Кабинет" />
+                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.InventoryNumber, Mode=TwoWay}" Header="Инвентарный номер" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid x:Name="GridAddEditElement" Visibility="Visible">
@@ -48,12 +58,21 @@
                             IsEditable="True"
                             IsReadOnly="True"
                             Text="Расположение" />
-                        <ComboBox x:Name="ComboBoxCompabilityPrinters" Margin="0 0 0 5" IsEditable="True" IsReadOnly="True" Text="Совместимые принтеры">
+                        <ComboBox
+                            x:Name="ComboBoxCompabilityPrinters"
+                            Margin="0,0,0,5"
+                            IsEditable="True"
+                            IsReadOnly="True"
+                            IsTextSearchEnabled="False"
+                            Text="Совместимые принтеры">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox/>
-                                        <TextBlock/>
+                                        <CheckBox Width="20" IsChecked="{Binding Path=isSelected}" />
+                                        <TextBlock
+                                            Width="auto"
+                                            Margin="-85,5,0,0"
+                                            Text="{Binding Path=cartridge.Name}" />
                                     </StackPanel>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>

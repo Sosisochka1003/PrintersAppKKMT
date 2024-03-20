@@ -17,12 +17,12 @@
                     <Frame x:Name="FrameCartridge" />
                 </TabItem.Content>
             </TabItem>
-            <TabItem x:Name="TabItemPrinters" Header="Принтеры">
+            <TabItem x:Name="TabItemPrinters" IsEnabled="False" Header="Принтеры">
                 <TabItem.Content>
                     <Frame x:Name="FramePrinters" />
                 </TabItem.Content>
             </TabItem>
-            <TabItem Header="Отчеты">
+            <TabItem Header="Отчеты" IsEnabled="False">
                 <TabItem.Content>
                     <Frame x:Name="FrameReports" />
                 </TabItem.Content>

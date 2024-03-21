@@ -36,13 +36,14 @@ namespace PrintersApp.Pages
             Cartridges = new BindingList<Cartridge>(ctx.Cartridges.ToList());
             DataGridCartridges.ItemsSource = Cartridges;
             ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
+            TextBoxStockCount.MaxLength = 2;
         }
 
         private void ButtonShowGrid_Click(object sender, RoutedEventArgs e)
         {
             TextBoxName.Text = null;
             TextBoxStockCount.Text = null;
-            ComboBoxLocation.Text = "Расопложение";
+            ComboBoxLocation.Text = "Расположение";
             pickCartridge = null;
 
             if (GridAddEditElement.Visibility == Visibility.Hidden)
@@ -81,8 +82,9 @@ namespace PrintersApp.Pages
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (TextBoxName.Text == null || TextBoxStockCount.Text == null || ComboBoxLocation.Text == "Расположение")
+            if (TextBoxName.Text == null || TextBoxName.Text.Length > 70 || TextBoxStockCount.Text == null || TextBoxStockCount.Text.Length > 5 || ComboBoxLocation.Text == "Расположение")
             {
+                MessageBox.Show("Неверное заполнение данных");
                 return;
             }
             if (pickCartridge == null)
@@ -96,6 +98,7 @@ namespace PrintersApp.Pages
                 ctx.Cartridges.Add(newCartridge);
                 await ctx.SaveChangesAsync();
                 Cartridges.Add(newCartridge);
+                return;
             }
             pickCartridge.Name = TextBoxName.Text;
             pickCartridge.StockCount = Convert.ToInt32(TextBoxStockCount.Text);
@@ -103,33 +106,25 @@ namespace PrintersApp.Pages
             ctx.Cartridges.Update(pickCartridge);
             await ctx.SaveChangesAsync();
             Cartridges.ResetItem(Cartridges.IndexOf(pickCartridge));
+            DataGridCartridges.ItemsSource = Cartridges;
             GridAddEditElement.Visibility = Visibility.Hidden;
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var paramSearchStr = ((TextBox)sender).Text;
-            if (Enum.TryParse<VarLocation>(paramSearchStr, out var paramSearchLocation))
+            var paramSearchStr = ((TextBox)sender).Text.ToLower();
+            if (TextBoxSearch.Text == null)
             {
-                var result = ctx.Cartridges.Where(c => c.Location == paramSearchLocation).ToList();
-                DataGridCartridges.ItemsSource = result;
+                DataGridCartridges.ItemsSource = Cartridges;
                 return;
             }
-
-            if (!int.TryParse(paramSearchStr, out int paramSearchNumber))
-            {
-                var result = ctx.Cartridges.Where(c => c.Name.ToLower().Contains(paramSearchStr.ToLower())).ToList();
-                DataGridCartridges.ItemsSource = result;
-                return;
-            }
-
-            var intResult = ctx.Cartridges.Where(c => c.StockCount == paramSearchNumber).ToList();
-            DataGridCartridges.ItemsSource = intResult;
+            var searchCartridges = Cartridges;
+            DataGridCartridges.ItemsSource = searchCartridges.Where(c => c.Id.ToString() == paramSearchStr || c.Name.ToLower().Contains(paramSearchStr) || c.Location.ToString().ToLower().Contains(paramSearchStr));
         }
 
         private void ButtonFilter_Click(object sender, RoutedEventArgs e)
         {
-
+            
         }
     }
 }

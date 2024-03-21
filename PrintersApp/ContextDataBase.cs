@@ -15,14 +15,13 @@ namespace PrintersApp
     {
         public ContextDataBase() 
         {
-            //Database.EnsureCreated();
+            Database.EnsureCreated();
         }
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseNpgsql("Host=10.10.104.119;Port=5432;Database=postgres;Username=postgres;Password=123");
-            //optionsBuilder.UseNpgsql("Host=postgres://hiwfvpzk:dpzhqMaC1eRPOchM26Kukc5vOY3J4Z4C@flora.db.elephantsql.com/hiwfvpzk; Port=5432; Database=hiwfvpzk; Username=hiwfvpzk; Password=dpzhqMaC1eRPOchM26Kukc5vOY3J4Z4C");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");
             //optionsBuilder.UseSqlite("Data Source=Printer.db");
         }
 

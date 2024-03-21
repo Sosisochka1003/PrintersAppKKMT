@@ -15,7 +15,11 @@
         <StackPanel Margin="3,3,3,3">
             <StackPanel Orientation="Horizontal">
                 <TextBox Margin="0,0,5,0" Text="Поиск" />
-                <Button Margin="0,0,5,0" Content="Фильтр" />
+                <Button
+                    x:Name="ButtonFilter"
+                    Margin="0,0,5,0"
+                    Click="ButtonFilter_Click"
+                    Content="Фильтр" />
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
                 <Button
                     x:Name="ButtonAddElement"
@@ -26,8 +30,8 @@
                 <DataGrid x:Name="DataGridPrinters" AutoGenerateColumns="False">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
-                            <MenuItem Header="Редактировать" />
-                            <MenuItem Header="Удалить" />
+                            <MenuItem x:Name="MenuItemEdit" Click="MenuItemEdit_Click" Header="Редактировать" />
+                            <MenuItem x:Name="MenuItemDelete" Click="MenuItemDelete_Click" Header="Удалить" />
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
@@ -38,7 +42,7 @@
                         <DataGridTextColumn Binding="{Binding Path=PrinterObject.InventoryNumber, Mode=TwoWay}" Header="Инвентарный номер" />
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid x:Name="GridAddEditElement" Visibility="Visible">
+                <Grid x:Name="GridAddEditElement" Visibility="Hidden">
                     <StackPanel Width="200" Margin="10,0,0,0">
                         <TextBox
                             x:Name="TextBoxName"

@@ -15,11 +15,15 @@
             <StackPanel Orientation="Horizontal">
                 <TextBox
                     x:Name="TextBoxSearch"
-                    TextChanged="TextBoxSearch_TextChanged"
                     Margin="0,0,5,0"
                     Style="{StaticResource placeHolder}"
-                    Tag="" />
-                <Button x:Name="ButtonFilter" Click="ButtonFilter_Click" Margin="0,0,5,0" Content="Фильтр" />
+                    Tag=""
+                    TextChanged="TextBoxSearch_TextChanged" />
+                <Button
+                    x:Name="ButtonFilter"
+                    Margin="0,0,5,0"
+                    Click="ButtonFilter_Click"
+                    Content="Фильтр" />
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
                 <Button
                     x:Name="ButtonShowGrid"
@@ -30,10 +34,9 @@
                 <DataGrid
                     x:Name="DataGridCartridges"
                     Margin="0,5,0,0"
-                    ItemsSource="{Binding Cartridges}"
                     AutoGenerateColumns="False"
-                    EnableColumnVirtualization="False"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    ItemsSource="{Binding Cartridges}">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem
@@ -49,17 +52,23 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Width="45"
+                            MaxWidth="45"
                             Binding="{Binding Path=Id, Mode=TwoWay}"
                             Header="№" />
                         <DataGridTextColumn
                             Width="200"
+                            MaxWidth="400"
                             Binding="{Binding Path=Name, Mode=TwoWay}"
                             Header="Наименование" />
                         <DataGridTextColumn
                             Width="150"
+                            MaxWidth="300"
                             Binding="{Binding Path=StockCount, Mode=TwoWay}"
                             Header="Кол-во на складе" />
-                        <DataGridTextColumn Binding="{Binding Path=Location}" Header="Расположение" />
+                        <DataGridTextColumn
+                            MaxWidth="200"
+                            Binding="{Binding Path=Location}"
+                            Header="Расположение" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid x:Name="GridAddEditElement" Visibility="Hidden">
@@ -67,12 +76,14 @@
                         <TextBox
                             x:Name="TextBoxName"
                             Margin="0,0,0,5"
+                            MaxLength="70"
                             Style="{StaticResource placeHolder}"
                             Tag="Наименование"
                             TextWrapping="Wrap" />
                         <TextBox
                             x:Name="TextBoxStockCount"
                             Margin="0,0,0,5"
+                            MaxLength="4"
                             Style="{StaticResource placeHolder}"
                             Tag="Кол-во на складе"
                             TextWrapping="Wrap" />

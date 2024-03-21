@@ -47,7 +47,9 @@ namespace PrintersApp.Pages
             TextBoxName.Text = null;
             TextBoxInventoryNumber.Text = null;
             ComboBoxLocation.Text = "Расположение";
-            ComboBoxCompabilityPrinters.Text = "Совместимые принтеры";
+            ComboBoxCompabilityPrinters.Text = "Совместимые картриджи";
+            var Cartridges = ctx.Cartridges.Select(c => new CartridgeWithBool { cartridge = c, isSelected = false }).ToList();
+            ComboBoxCompabilityPrinters.ItemsSource = Cartridges;
             if (GridAddEditElement.Visibility == Visibility.Hidden)
             {
                 GridAddEditElement.Visibility = Visibility.Visible;
@@ -56,6 +58,34 @@ namespace PrintersApp.Pages
             {
                 GridAddEditElement.Visibility = Visibility.Hidden;
             }
+        }
+
+        private void ButtonFilter_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+            pickPrinter = (PrinterInRoom)DataGridPrinters.SelectedItem;
+            TextBoxName.Text = pickPrinter.PrinterObject.Name;
+            TextBoxInventoryNumber.Text = pickPrinter.PrinterObject.InventoryNumber.ToString();
+            ComboBoxLocation.SelectedItem = pickPrinter.PrinterObject.Location;
+            ComboBoxCompabilityPrinters.ItemsSource = ctx.Cartridges.Select(c => new CartridgeWithBool { cartridge = c, isSelected = ctx.PrinterCartridges.Any(x => x.Cartridge == c) }).ToList();
+        }
+
+        private async void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+            PrinterInRoom deletePrinter = (PrinterInRoom)DataGridPrinters.SelectedItem;
+            if (deletePrinter == null)
+            {
+                return;
+            }
+            ctx.PrinterCartridges.RemoveRange(ctx.PrinterCartridges.Where(x => x.PrinterId == deletePrinter.PrinterId));
+            ctx.PrinterInRooms.Remove(deletePrinter);
+            ctx.Printers.Remove(ctx.Printers.FirstOrDefault(x => x.Id == deletePrinter.PrinterId));
+            await ctx.SaveChangesAsync();
+            Printers.Remove(deletePrinter);
         }
     }
 }

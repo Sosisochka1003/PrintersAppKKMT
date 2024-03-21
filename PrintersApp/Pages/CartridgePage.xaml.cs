@@ -82,7 +82,7 @@ namespace PrintersApp.Pages
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (TextBoxName.Text == null || TextBoxName.Text.Length > 70 || TextBoxStockCount.Text == null || TextBoxStockCount.Text.Length > 5 || ComboBoxLocation.Text == "Расположение")
+            if (TextBoxName.Text == "" || TextBoxStockCount.Text == "" || !Int32.TryParse(TextBoxStockCount.Text, out int a) || ComboBoxLocation.Text == "Расположение")
             {
                 MessageBox.Show("Неверное заполнение данных");
                 return;
@@ -107,24 +107,37 @@ namespace PrintersApp.Pages
             await ctx.SaveChangesAsync();
             Cartridges.ResetItem(Cartridges.IndexOf(pickCartridge));
             DataGridCartridges.ItemsSource = Cartridges;
+            TextBoxSearch.Text = "Поиск";
             GridAddEditElement.Visibility = Visibility.Hidden;
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var paramSearchStr = ((TextBox)sender).Text.ToLower();
-            if (TextBoxSearch.Text == null)
+            if (((TextBox)sender).Text == "" || ((TextBox)sender).Text == "Поиск")
             {
                 DataGridCartridges.ItemsSource = Cartridges;
                 return;
             }
+            var paramSearch = ((TextBox)sender).Text.ToLower();
             var searchCartridges = Cartridges;
-            DataGridCartridges.ItemsSource = searchCartridges.Where(c => c.Id.ToString() == paramSearchStr || c.Name.ToLower().Contains(paramSearchStr) || c.Location.ToString().ToLower().Contains(paramSearchStr));
+            DataGridCartridges.ItemsSource = searchCartridges.Where(c => c.Id.ToString() == paramSearch || 
+                                                                    c.Name.ToLower().Contains(paramSearch) || 
+                                                                    c.Location.ToString().ToLower().Contains(paramSearch));
         }
 
         private void ButtonFilter_Click(object sender, RoutedEventArgs e)
         {
             
+        }
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                DataGridCartridges.ItemsSource = Cartridges = new BindingList<Cartridge>(ctx.Cartridges.ToList());
+                TextBoxSearch.Text = null;
+                MessageBox.Show("Обновлено");
+            }
         }
     }
 }

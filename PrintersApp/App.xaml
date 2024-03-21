@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="clr-namespace:PrintersApp"
     xmlns:ui="http://schemas.modernwpf.com/2019"
-    StartupUri="MainWindow.xaml">
+    StartupUri="StartWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
             <Style
@@ -19,6 +19,7 @@
                                     x:Name="textSource"
                                     Panel.ZIndex="2"
                                     Background="Transparent"
+                                    MaxLength="{TemplateBinding MaxLength}"
                                     Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBox
                                     VerticalAlignment="Center"

@@ -22,7 +22,6 @@ namespace PrintersApp
         {
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");
-            //optionsBuilder.UseSqlite("Data Source=Printer.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -51,7 +50,7 @@ namespace PrintersApp
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
             public string Name { get; set; }
-            public int InventoryNumber { get; set; }
+            public Int64 InventoryNumber { get; set; }
             public VarLocation Location { get; set; }
         }
 

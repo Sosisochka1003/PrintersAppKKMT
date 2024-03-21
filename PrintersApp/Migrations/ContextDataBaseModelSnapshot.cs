@@ -128,6 +128,7 @@ namespace PrintersApp.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Room")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

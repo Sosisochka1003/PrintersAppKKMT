@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PrintersApp.Pages;
+﻿using PrintersApp.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +25,6 @@ namespace PrintersApp
         public StartWindow()
         {
             InitializeComponent();
-            //ctx.Database.Migrate();
             FrameCartridge.Navigate(new CartridgePage(ctx));
             FramePrinters.Navigate(new PrintersPage(ctx));
         }

@@ -8,7 +8,8 @@
     Title="CartridgePage"
     d:DesignHeight="380"
     d:DesignWidth="800"
-    mc:Ignorable="d" KeyDown="Page_KeyDown">
+    KeyDown="Page_KeyDown"
+    mc:Ignorable="d">
 
     <Grid Background="White">
         <StackPanel Margin="3,3,3,3">
@@ -18,6 +19,7 @@
                     Margin="0,0,5,0"
                     Style="{StaticResource placeHolder}"
                     Tag=""
+                    MaxLength="120"
                     TextChanged="TextBoxSearch_TextChanged" />
                 <Button
                     x:Name="ButtonFilter"
@@ -27,8 +29,19 @@
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
                 <Button
                     x:Name="ButtonShowGrid"
+                    Margin="0,0,5,0"
                     Click="ButtonShowGrid_Click"
                     Content="Добавить" />
+                <Button
+                    x:Name="ButtonShowShipmentGrid"
+                    Margin="0,0,5,0"
+                    Click="ButtonShowShipmentGrid_Click"
+                    Content="Выдать" />
+                <Button
+                    x:Name="ButtonShowCommingGrid"
+                    Margin="0,0,5,0"
+                    Click="ButtonShowCommingGrid_Click"
+                    Content="Поставка" />
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <DataGrid
@@ -71,35 +84,102 @@
                             Header="Расположение" />
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid x:Name="GridAddEditElement" Visibility="Hidden">
-                    <StackPanel Width="200" Margin="10,0,0,0">
-                        <TextBox
-                            x:Name="TextBoxName"
-                            Margin="0,0,0,5"
-                            MaxLength="70"
-                            Style="{StaticResource placeHolder}"
-                            Tag="Наименование"
-                            TextWrapping="Wrap" />
-                        <TextBox
-                            x:Name="TextBoxStockCount"
-                            Margin="0,0,0,5"
-                            MaxLength="4"
-                            Style="{StaticResource placeHolder}"
-                            Tag="Кол-во на складе"
-                            TextWrapping="Wrap" />
-                        <ComboBox
-                            x:Name="ComboBoxLocation"
-                            Margin="0,0,0,5"
-                            IsEditable="True"
-                            IsReadOnly="True"
-                            Text="Расположение" />
-                        <Button
-                            x:Name="ButtonSubmit"
-                            Margin="0,0,0,5"
-                            HorizontalAlignment="Center"
-                            Click="ButtonSubmit_Click"
-                            Content="Сохранить" />
-                    </StackPanel>
+                <Grid x:Name="MainGrid" Margin="10,0,0,0">
+                    <Grid x:Name="GridAddEditElement" Visibility="Hidden">
+                        <StackPanel Width="200" Visibility="Visible">
+                            <TextBox
+                                x:Name="TextBoxName"
+                                Margin="0,0,0,5"
+                                MaxLength="70"
+                                Style="{StaticResource placeHolder}"
+                                Tag="Наименование"
+                                TextWrapping="Wrap" />
+                            <TextBox
+                                x:Name="TextBoxStockCount"
+                                Margin="0,0,0,5"
+                                MaxLength="4"
+                                Style="{StaticResource placeHolder}"
+                                Tag="Кол-во на складе"
+                                TextWrapping="Wrap" />
+                            <ComboBox
+                                x:Name="ComboBoxLocation"
+                                Margin="0,0,0,5"
+                                IsEditable="True"
+                                IsReadOnly="True"
+                                Text="Расположение" />
+                            <Button
+                                x:Name="ButtonSubmit"
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Center"
+                                Click="ButtonSubmit_Click"
+                                Content="Сохранить" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid x:Name="GridShipmentCartridge" Visibility="Hidden">
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox
+                                    x:Name="TextBoxShipmentRoom"
+                                    Width="80"
+                                    MaxLength="10"
+                                    Margin="0,0,5,5"
+                                    Style="{StaticResource placeHolder}"
+                                    Tag="Кабинет" />
+                                <ComboBox
+                                    x:Name="ComboBoxShipmentLocation"
+                                    Margin="0,0,5,5"
+                                    IsEditable="True"
+                                    IsReadOnly="True"
+                                    Text="Расположение" />
+                            </StackPanel>
+                            <ComboBox
+                                x:Name="ComboBoxPrinters"
+                                Margin="0,0,0,5"
+                                IsEditable="True"
+                                IsReadOnly="True"
+                                Text="Принтер" />
+                            <StackPanel Orientation="Horizontal">
+                                <CheckBox
+                                    x:Name="CheckBoxAutoFillCartridge"
+                                    Margin="0,0,0,5"
+                                    Content="Auto"
+                                    IsChecked="True" />
+                                <ComboBox
+                                    x:Name="ComboBoxShipmentCartridge"
+                                    Margin="-40,0,0,5"
+                                    IsEditable="True"
+                                    IsEnabled="False"
+                                    IsReadOnly="True"
+                                    Text="Картридж" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                    <Grid x:Name="GridCommingCartridges" Visibility="Hidden">
+                        <StackPanel>
+                            <ComboBox
+                                x:Name="ComboBoxCommingCartridges"
+                                Width="auto"
+                                Margin="0,0,0,5"
+                                DisplayMemberPath="Name"
+                                IsEditable="True"
+                                IsReadOnly="True"
+                                Text="Картридж" />
+                            <TextBox
+                                x:Name="TextBoxCommingCount"
+                                Width="170"
+                                Margin="0,0,0,5"
+                                MaxLength="5"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource placeHolder}"
+                                Tag="Колличество единиц" />
+                            <DatePicker x:Name="DatePickerDateComming" Margin="0,0,0,5" />
+                            <Button
+                                x:Name="ButtonComming"
+                                Margin="0,0,0,5"
+                                Click="ButtonComming_Click"
+                                Content="Добавить" />
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </StackPanel>
         </StackPanel>

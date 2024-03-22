@@ -24,7 +24,7 @@ namespace PrintersApp.Pages
     {
         public class CartridgeWithBool
         {
-            public Cartridge cartridge { get; set; }
+            public required Cartridge cartridge { get; set; }
             public bool isSelected { get; set; }
         }
         ContextDataBase ctx;
@@ -101,7 +101,7 @@ namespace PrintersApp.Pages
             }
             string paramSearch = ((TextBox)sender).Text.ToLower();
             var searchPrinters = Printers;
-            DataGridPrinters.ItemsSource = searchPrinters.Where(p => p.PrinterObject.Id.ToString() == paramSearch || 
+            DataGridPrinters.ItemsSource = searchPrinters.Where(p => p.PrinterObject.Id.ToString() == paramSearch ||  
                                                                      p.Room.ToString() == paramSearch || 
                                                                      p.PrinterObject.InventoryNumber.ToString().ToLower().Contains(paramSearch)|| 
                                                                      p.PrinterObject.Name.ToLower().Contains(paramSearch) || 

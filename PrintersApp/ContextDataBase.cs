@@ -49,7 +49,7 @@ namespace PrintersApp
         {
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
-            public string Name { get; set; }
+            public required string Name { get; set; }
             public Int64 InventoryNumber { get; set; }
             public VarLocation Location { get; set; }
         }
@@ -61,14 +61,14 @@ namespace PrintersApp
             public string? Room { get; set; }
             [ForeignKey(nameof(Printer))]
             public int PrinterId { get; set; }
-            public Printer PrinterObject { get; set; }
+            public required Printer PrinterObject { get; set; }
         }
 
         public class Cartridge  
         {
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
-            public string Name { get; set; }
+            public required string Name { get; set; }
             public int StockCount { get; set; }
             public VarLocation Location { get; set; }
         }
@@ -79,9 +79,9 @@ namespace PrintersApp
             public int Id { get; set; }
             [ForeignKey(nameof(Cartridge))]
             public int CartridgeId { get; set; }
-            public Cartridge CartridgeObject { get; set; }
+            public required Cartridge CartridgeObject { get; set; }
             public int Count { get; set; }
-            public DateTime CommingDate { get; set; }
+            public required DateTime CommingDate { get; set; }
         }
 
         public class Shipment
@@ -90,11 +90,11 @@ namespace PrintersApp
             public int Id { get; set; }
             [ForeignKey(nameof(Printer))]
             public int PrinterId { get; set; }
-            public Printer PrinterObject { get; set; }
-            public string Room { get; set; }
+            public required Printer PrinterObject { get; set; }
+            public required string Room { get; set; }
             [ForeignKey(nameof(Cartridge))]
             public int CartridgeId { get; set; }
-            public Cartridge CartridgeObject { get; set; }
+            public required Cartridge CartridgeObject { get; set; }
             public DateTime ShipmentDate { get; set;}
         }
 
@@ -104,10 +104,10 @@ namespace PrintersApp
             public int Id { get; set; }
             [ForeignKey(nameof(Printer))]
             public int PrinterId { get; set; }
-            public Printer Printer { get; set; }
+            public required Printer Printer { get; set; }
             [ForeignKey(nameof(Cartridge))]
             public int CartridgeId { get; set; }
-            public Cartridge Cartridge { get; set; }
+            public required Cartridge Cartridge { get; set; }
         }
     }
 }

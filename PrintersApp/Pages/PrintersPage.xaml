@@ -9,7 +9,8 @@
     Title="PrintersPage"
     d:DesignHeight="380"
     d:DesignWidth="800"
-    mc:Ignorable="d" KeyDown="Page_KeyDown">
+    KeyDown="Page_KeyDown"
+    mc:Ignorable="d">
 
     <Grid Background="White">
         <StackPanel Margin="3,3,3,3">
@@ -58,15 +59,15 @@
                         <TextBox
                             x:Name="TextBoxName"
                             Margin="0,0,0,5"
-                            Style="{StaticResource placeHolder}"
                             MaxLength="70"
+                            Style="{StaticResource placeHolder}"
                             Tag="Наименование"
                             TextWrapping="Wrap" />
                         <TextBox
                             x:Name="TextBoxInventoryNumber"
                             Margin="0,0,0,5"
-                            Style="{StaticResource placeHolder}"
                             MaxLength="20"
+                            Style="{StaticResource placeHolder}"
                             Tag="Инвентарный номер"
                             TextWrapping="Wrap" />
                         <TextBox

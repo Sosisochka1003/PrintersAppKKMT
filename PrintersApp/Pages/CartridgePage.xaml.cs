@@ -45,6 +45,8 @@ namespace PrintersApp.Pages
             TextBoxStockCount.Text = null;
             ComboBoxLocation.Text = "Расположение";
             pickCartridge = null;
+            GridCommingCartridges.Visibility = Visibility.Hidden;
+            GridShipmentCartridge.Visibility = Visibility.Hidden;
 
             if (GridAddEditElement.Visibility == Visibility.Hidden)
             {
@@ -63,6 +65,8 @@ namespace PrintersApp.Pages
                 return;
             }
             GridAddEditElement.Visibility = Visibility.Visible;
+            GridCommingCartridges.Visibility = Visibility.Hidden;
+            GridShipmentCartridge.Visibility = Visibility.Hidden;
             pickCartridge = DataGridCartridges.SelectedItem as Cartridge;
             TextBoxName.Text = pickCartridge?.Name;
             TextBoxStockCount.Text = pickCartridge?.StockCount.ToString();
@@ -71,13 +75,14 @@ namespace PrintersApp.Pages
 
         private async void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-            if (DataGridCartridges.SelectedItem != null)
+            if (DataGridCartridges.SelectedItem == null)
             {
-                var deleteItem = ctx.Cartridges.FirstOrDefault(x => x.Id == (DataGridCartridges.SelectedItem as Cartridge).Id);
-                ctx.Cartridges.Remove(deleteItem);
-                await ctx.SaveChangesAsync();
-                Cartridges.Remove(deleteItem);
+                
             }
+            Cartridge deleteItem = ctx.Cartridges.FirstOrDefault(x => x.Id == (DataGridCartridges.SelectedItem as Cartridge).Id);
+            ctx.Cartridges.Remove(deleteItem);
+            await ctx.SaveChangesAsync();
+            Cartridges.Remove(deleteItem);
         }
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
@@ -138,6 +143,61 @@ namespace PrintersApp.Pages
                 TextBoxSearch.Text = null;
                 MessageBox.Show("Обновлено");
             }
+        }
+
+        private void ButtonShowShipmentGrid_Click(object sender, RoutedEventArgs e)
+        {
+            GridAddEditElement.Visibility = Visibility.Hidden;
+            GridCommingCartridges.Visibility = Visibility.Hidden;
+
+            if (GridShipmentCartridge.Visibility == Visibility.Hidden)
+            {
+                GridShipmentCartridge.Visibility = Visibility.Visible;
+            }
+            else if (GridShipmentCartridge.Visibility == Visibility.Visible)
+            {
+                GridShipmentCartridge.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void ButtonShowCommingGrid_Click(object sender, RoutedEventArgs e)
+        {
+            GridAddEditElement.Visibility= Visibility.Hidden;
+            GridShipmentCartridge.Visibility= Visibility.Hidden;
+            TextBoxCommingCount.Text = null;
+            ComboBoxCommingCartridges.ItemsSource = ctx.Cartridges.ToList();
+            DatePickerDateComming.Text = DateOnly.FromDateTime(DateTime.Now).ToString();
+
+            if (GridCommingCartridges.Visibility == Visibility.Hidden)
+            {
+                GridCommingCartridges.Visibility = Visibility.Visible;
+            }
+            else if (GridCommingCartridges.Visibility == Visibility.Visible)
+            {
+                GridCommingCartridges.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private async void ButtonComming_Click(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxCommingCartridges.SelectedItem == null || TextBoxCommingCount.Text == "" || !Int32.TryParse(TextBoxCommingCount.Text, out int count) || DatePickerDateComming.Text == null)
+            {
+                MessageBox.Show("Ошибка заполнения");
+                return;
+            }
+            DateTime TimeComming = DateTime.SpecifyKind((DateTime)DatePickerDateComming.SelectedDate, DateTimeKind.Utc);
+            ctx.Commings.Add(new Comming
+            {
+                CartridgeId = ((Cartridge)ComboBoxCommingCartridges.SelectedItem).Id,
+                CartridgeObject = (Cartridge)ComboBoxCommingCartridges.SelectedItem,
+                Count = count,
+                CommingDate = TimeComming
+            });
+            await ctx.SaveChangesAsync();
+            ctx.Cartridges.FirstOrDefault(x => x == (Cartridge)ComboBoxCommingCartridges.SelectedItem).StockCount += count;
+            await ctx.SaveChangesAsync();
+            DataGridCartridges.ItemsSource = Cartridges = new BindingList<Cartridge>(ctx.Cartridges.ToList());
+            GridCommingCartridges.Visibility = Visibility.Hidden;
         }
     }
 }

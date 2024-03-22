@@ -25,7 +25,10 @@
                     <Frame x:Name="FramePrinters" />
                 </TabItem.Content>
             </TabItem>
-            <TabItem Header="Отчеты" IsEnabled="False">
+            <TabItem
+                x:Name="TabItemReports"
+                Header="Отчеты"
+                IsEnabled="True">
                 <TabItem.Content>
                     <Frame x:Name="FrameReports" />
                 </TabItem.Content>

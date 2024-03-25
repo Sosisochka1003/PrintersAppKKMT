@@ -22,13 +22,13 @@ namespace PrintersApp.Windows
     /// </summary>
     public partial class Printers : Window
     {
-        ContextDataBase ctx;
+        //ContextDataBase ctx;
 
-        List<FilterItems> test;
+        //List<FilterItems> test;
         public Printers(ContextDataBase globalctx)
         {
             InitializeComponent();
-            ctx = globalctx;
+            //ctx = globalctx;
 
            // test = ctx.Printers.Join(ctx.PrinterInRooms,
            //     p => p.Id,
@@ -47,30 +47,30 @@ namespace PrintersApp.Windows
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            var filterText = ((TextBox)sender).Text.ToLower();
-            DataGridPrinters.ItemsSource = test.Where(p => p.Name.ToLower().Contains(filterText) ||
-                                                p.Room.ToLower().Contains(filterText) ||
-                                                p.CartridgeName.ToLower().Contains(filterText));
+            //var filterText = ((TextBox)sender).Text.ToLower();
+            //DataGridPrinters.ItemsSource = test.Where(p => p.Name.ToLower().Contains(filterText) ||
+            //                                    p.Room.ToLower().Contains(filterText) ||
+            //                                    p.CartridgeName.ToLower().Contains(filterText));
         }
 
-        public class FilterItems
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public string CartridgeName { get; set; }
-            public string Room { get; set; }
-        }
+        //public class FilterItems
+        //{
+        //    public int Id { get; set; }
+        //    public string Name { get; set; }
+        //    public string CartridgeName { get; set; }
+        //    public string Room { get; set; }
+        //}
 
         private void ButtonAddPrinter_Click(object sender, RoutedEventArgs e)
         {
-            var PrinterInfoWindow = new PrinterInfo(ctx);
-            PrinterInfoWindow.Show();
+            //var PrinterInfoWindow = new PrinterInfo(ctx);
+            //PrinterInfoWindow.Show();
         }
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.F5)
-            {
+            //if (e.Key == Key.F5)
+            //{
                 //DataGridPrinters.ItemsSource = ctx.Printers.Join(ctx.PrinterInRooms,
                 //p => p.Id,
                 //pr => pr.PrinterId,
@@ -81,23 +81,23 @@ namespace PrintersApp.Windows
                 //    CartridgeName = p.CartridgeObject.Name,
                 //    Room = pr.Room,
                 //}).ToList();
-            }
+            //}
         }
 
         private void MenuItemRemove_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult res = MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            if (res == MessageBoxResult.No)
-            {
-                return;
-            }
-            var deleteItemId = ctx.Printers.FirstOrDefault(p => p.Id == ((FilterItems)DataGridPrinters.SelectedItem).Id);
-            if (deleteItemId == null)
-            {
-                return;
-            }
-            ctx.Printers.Remove(deleteItemId);
-            ctx.SaveChanges();
+            //MessageBoxResult res = MessageBox.Show("Удалить?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            //if (res == MessageBoxResult.No)
+            //{
+            //    return;
+            //}
+            //var deleteItemId = ctx.Printers.FirstOrDefault(p => p.Id == ((FilterItems)DataGridPrinters.SelectedItem).Id);
+            //if (deleteItemId == null)
+            //{
+            //    return;
+            //}
+            //ctx.Printers.Remove(deleteItemId);
+            //ctx.SaveChanges();
             //DataGridPrinters.ItemsSource = ctx.Printers.Join(ctx.PrinterInRooms,
             //    p => p.Id,
             //    pr => pr.PrinterId,
@@ -112,8 +112,8 @@ namespace PrintersApp.Windows
 
         private void MenuItemUpdate_Click(object sender, RoutedEventArgs e)
         {
-            var PrinterInfoWindow = new PrinterInfo(ctx, ((FilterItems)DataGridPrinters.SelectedItem));
-            PrinterInfoWindow.Show();
+            //var PrinterInfoWindow = new PrinterInfo(ctx, ((FilterItems)DataGridPrinters.SelectedItem));
+            //PrinterInfoWindow.Show();
         }
     }
 }

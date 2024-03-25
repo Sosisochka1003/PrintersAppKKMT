@@ -18,7 +18,7 @@ namespace PrintersApp.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("PrinterApp")
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -63,6 +63,9 @@ namespace PrintersApp.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Location")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CartridgeId");
@@ -78,8 +81,9 @@ namespace PrintersApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("InventoryNumber")
-                        .HasColumnType("bigint");
+                    b.Property<string>("InventoryNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Location")
                         .HasColumnType("integer");

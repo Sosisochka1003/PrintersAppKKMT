@@ -12,8 +12,8 @@ using PrintersApp;
 namespace PrintersApp.Migrations
 {
     [DbContext(typeof(ContextDataBase))]
-    [Migration("20240313104633_alllocations")]
-    partial class alllocations
+    [Migration("20240325081605_klema4444")]
+    partial class klema4444
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace PrintersApp.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("PrinterApp")
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -66,6 +66,9 @@ namespace PrintersApp.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("integer");
 
+                    b.Property<int>("Location")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CartridgeId");
@@ -81,8 +84,9 @@ namespace PrintersApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("InventoryNumber")
-                        .HasColumnType("integer");
+                    b.Property<string>("InventoryNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Location")
                         .HasColumnType("integer");
@@ -131,7 +135,6 @@ namespace PrintersApp.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Room")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

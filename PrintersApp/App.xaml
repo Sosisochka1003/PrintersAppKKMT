@@ -27,6 +27,8 @@
                                     Panel.ZIndex="1"
                                     Background="{TemplateBinding Background}"
                                     BorderThickness="0"
+                                    IsHitTestVisible="False"
+                                    IsTabStop="False"
                                     Text="{TemplateBinding Tag}">
                                     <TextBox.Style>
                                         <Style TargetType="{x:Type TextBox}">

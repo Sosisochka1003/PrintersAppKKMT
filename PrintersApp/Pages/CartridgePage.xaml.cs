@@ -77,7 +77,7 @@ namespace PrintersApp.Pages
         {
             if (DataGridCartridges.SelectedItem == null)
             {
-                
+                return;
             }
             Cartridge deleteItem = ctx.Cartridges.FirstOrDefault(x => x.Id == (DataGridCartridges.SelectedItem as Cartridge).Id);
             ctx.Cartridges.Remove(deleteItem);
@@ -87,7 +87,7 @@ namespace PrintersApp.Pages
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (TextBoxName.Text == "" || TextBoxStockCount.Text == "" || !Int32.TryParse(TextBoxStockCount.Text, out int a) || ComboBoxLocation.Text == "Расположение")
+            if (TextBoxName.Text == "" || TextBoxStockCount.Text == "" || !Int32.TryParse(TextBoxStockCount.Text, out int StockCount) || ComboBoxLocation.Text == "Расположение")
             {
                 MessageBox.Show("Неверное заполнение данных");
                 return;
@@ -97,12 +97,13 @@ namespace PrintersApp.Pages
                 var newCartridge = new Cartridge
                 {
                     Name = TextBoxName.Text,
-                    StockCount = Convert.ToInt32(TextBoxStockCount.Text),
+                    StockCount = StockCount,
                     Location = (VarLocation)ComboBoxLocation.SelectedItem
                 };
                 ctx.Cartridges.Add(newCartridge);
                 await ctx.SaveChangesAsync();
                 Cartridges.Add(newCartridge);
+                GridAddEditElement.Visibility = Visibility.Hidden;
                 return;
             }
             pickCartridge.Name = TextBoxName.Text;
@@ -110,10 +111,10 @@ namespace PrintersApp.Pages
             pickCartridge.Location = (VarLocation)ComboBoxLocation.SelectedItem;
             ctx.Cartridges.Update(pickCartridge);
             await ctx.SaveChangesAsync();
+            GridAddEditElement.Visibility = Visibility.Hidden;
             Cartridges.ResetItem(Cartridges.IndexOf(pickCartridge));
             DataGridCartridges.ItemsSource = Cartridges;
-            TextBoxSearch.Text = "Поиск";
-            GridAddEditElement.Visibility = Visibility.Hidden;
+            TextBoxSearch.Text = null;
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
@@ -150,9 +151,22 @@ namespace PrintersApp.Pages
             GridAddEditElement.Visibility = Visibility.Hidden;
             GridCommingCartridges.Visibility = Visibility.Hidden;
 
+            TextBoxShipmentRoom.Text = null;
+            ComboBoxShipmentLocation.Text = "Расположение";
+            ComboBoxShipmentCartridge.Text = "Картридж";
+            ComboBoxPrinters.Text = "Принтер";
+
+            ComboBoxShipmentLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
+
+            //ComboBoxPrinters.ItemsSource = ctx.Printers.ToList();
+
+            ComboBoxShipmentCartridge.ItemsSource = ctx.Cartridges.ToList();
+
+
             if (GridShipmentCartridge.Visibility == Visibility.Hidden)
             {
                 GridShipmentCartridge.Visibility = Visibility.Visible;
+                MessageBox.Show("Порядок заполнения: Кабинет => Расположение => Принтер \nВ другом порядке всё может сломается", "Alert");
             }
             else if (GridShipmentCartridge.Visibility == Visibility.Visible)
             {
@@ -165,7 +179,10 @@ namespace PrintersApp.Pages
             GridAddEditElement.Visibility= Visibility.Hidden;
             GridShipmentCartridge.Visibility= Visibility.Hidden;
             TextBoxCommingCount.Text = null;
-            ComboBoxCommingCartridges.ItemsSource = ctx.Cartridges.ToList();
+            ComboBoxCommingCartrideLocations.Text = "Расположение";
+            ComboBoxCommingCartridges.Text = "Картридж";
+            ComboBoxCommingCartrideLocations.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
+
             DatePickerDateComming.Text = DateOnly.FromDateTime(DateTime.Now).ToString();
 
             if (GridCommingCartridges.Visibility == Visibility.Hidden)
@@ -190,6 +207,7 @@ namespace PrintersApp.Pages
             {
                 CartridgeId = ((Cartridge)ComboBoxCommingCartridges.SelectedItem).Id,
                 CartridgeObject = (Cartridge)ComboBoxCommingCartridges.SelectedItem,
+                Location = (VarLocation)ComboBoxCommingCartrideLocations.SelectedItem,
                 Count = count,
                 CommingDate = TimeComming
             });
@@ -198,6 +216,97 @@ namespace PrintersApp.Pages
             await ctx.SaveChangesAsync();
             DataGridCartridges.ItemsSource = Cartridges = new BindingList<Cartridge>(ctx.Cartridges.ToList());
             GridCommingCartridges.Visibility = Visibility.Hidden;
+        }
+
+        private void ComboBoxCommingCartrideLocations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ComboBoxCommingCartrideLocations.SelectedItem == null)
+            {
+                return;
+            }
+            ComboBoxCommingCartridges.ItemsSource = ctx.Cartridges.Where(x => x.Location == (VarLocation)ComboBoxCommingCartrideLocations.SelectedItem).ToList();
+        }
+
+        private void CheckBoxAutoFillCartridge_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxShipmentCartridge != null)
+            {
+                ComboBoxShipmentCartridge.IsEnabled = true;
+                //ComboBoxShipmentCartridge.ItemsSource = ctx.Cartridges.ToList();
+            }
+        }
+
+        private void CheckBoxAutoFillCartridge_Checked(object sender, RoutedEventArgs e)
+        {
+            if (ComboBoxShipmentCartridge != null)
+            {
+                ComboBoxShipmentCartridge.IsEnabled = false;
+            }
+        }
+
+        private async void ButtonShipmentCartridge_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextBoxShipmentRoom.Text == null || 
+                ComboBoxShipmentLocation.SelectedItem == null || 
+                ComboBoxPrinters.SelectedItem == null || 
+                ComboBoxShipmentCartridge.SelectedItem == null)
+            {
+                MessageBox.Show("Неверное заполнение");
+                return;
+            }
+
+            ctx.Shipments.Add(new Shipment
+            {
+                CartridgeId = ((PrinterCartridge)ComboBoxShipmentCartridge.SelectedItem).Cartridge.Id,
+                CartridgeObject = ((PrinterCartridge)ComboBoxShipmentCartridge.SelectedItem).Cartridge,
+                PrinterId = ((PrinterInRoom)ComboBoxPrinters.SelectedItem).PrinterObject.Id,
+                PrinterObject = ((PrinterInRoom)ComboBoxPrinters.SelectedItem).PrinterObject,
+                Room = TextBoxShipmentRoom.Text,
+                ShipmentDate = DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc),
+            });
+            await ctx.SaveChangesAsync();
+            ctx.Cartridges.FirstOrDefault(x => x.Id == ((PrinterCartridge)ComboBoxShipmentCartridge.SelectedItem).Cartridge.Id).StockCount--;
+            await ctx.SaveChangesAsync();
+            DataGridCartridges.ItemsSource = Cartridges = new BindingList<Cartridge>(ctx.Cartridges.ToList());
+            GridShipmentCartridge.Visibility= Visibility.Hidden;
+            MessageBox.Show("Выдалось");
+        }
+
+        private void TextBoxShipmentRoom_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            ComboBoxPrinters.ItemsSource = ctx.PrinterInRooms.Where(x => x.Room.ToLower().Contains(TextBoxShipmentRoom.Text.ToLower())).ToList();
+            if (ComboBoxPrinters.Items.Count > 0)
+            {
+                ComboBoxPrinters.SelectedItem = ComboBoxPrinters.Items[0];
+            }
+        }
+
+        private void ComboBoxShipmentLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            try
+            {
+                ComboBoxPrinters.ItemsSource = ctx.PrinterInRooms.Where(x => x.Room.ToLower().Contains(TextBoxShipmentRoom.Text.ToLower()) &
+                                                                             x.PrinterObject.Location == ((VarLocation)ComboBoxShipmentLocation.SelectedItem)).ToList();
+                ComboBoxPrinters.SelectedItem = ComboBoxPrinters.Items[0];
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("нету принтера в выбранном корпусе", "Alert");
+                return;
+                //throw;
+            }
+        }
+
+        private void ComboBoxPrinters_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedPrinter = ComboBoxPrinters.SelectedItem as PrinterInRoom;
+            if (selectedPrinter != null)
+            {
+                ComboBoxShipmentCartridge.ItemsSource = ctx.PrinterCartridges.Where(x => x.Printer == selectedPrinter.PrinterObject).ToList();
+                ComboBoxShipmentCartridge.SelectedItem = ComboBoxShipmentCartridge.Items[0];
+            }
+            
+
         }
     }
 }

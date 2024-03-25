@@ -123,7 +123,7 @@ namespace PrintersApp.Pages
                 if (updatePrinter != null && updateRoom != null)
                 {
                     updatePrinter.Name = TextBoxName.Text;
-                    updatePrinter.InventoryNumber = Convert.ToInt64(TextBoxInventoryNumber.Text);
+                    updatePrinter.InventoryNumber = TextBoxInventoryNumber.Text;
                     updatePrinter.Location = (VarLocation)ComboBoxLocation.SelectedItem;
                     foreach (CartridgeWithBool item in ComboBoxCompabilityCartridges.Items)
                     {
@@ -150,7 +150,7 @@ namespace PrintersApp.Pages
             var newPrinter = new Printer
             {
                 Name = TextBoxName.Text,
-                InventoryNumber = Convert.ToInt64(TextBoxInventoryNumber.Text),
+                InventoryNumber = TextBoxInventoryNumber.Text,
                 Location = (VarLocation)ComboBoxLocation.SelectedItem,
             };
             var newPrinterInRoom = new PrinterInRoom

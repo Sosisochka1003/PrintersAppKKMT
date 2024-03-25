@@ -17,9 +17,9 @@
                 <TextBox
                     x:Name="TextBoxSearch"
                     Margin="0,0,5,0"
+                    MaxLength="120"
                     Style="{StaticResource placeHolder}"
                     Tag=""
-                    MaxLength="120"
                     TextChanged="TextBoxSearch_TextChanged" />
                 <Button
                     x:Name="ButtonFilter"
@@ -84,7 +84,10 @@
                             Header="Расположение" />
                     </DataGrid.Columns>
                 </DataGrid>
-                <Grid x:Name="MainGrid" Margin="10,0,0,0">
+                <Grid
+                    x:Name="MainGrid"
+                    Margin="10,0,0,0"
+                    Visibility="Visible">
                     <Grid x:Name="GridAddEditElement" Visibility="Hidden">
                         <StackPanel Width="200" Visibility="Visible">
                             <TextBox
@@ -121,55 +124,78 @@
                                 <TextBox
                                     x:Name="TextBoxShipmentRoom"
                                     Width="80"
-                                    MaxLength="10"
                                     Margin="0,0,5,5"
+                                    MaxLength="10"
                                     Style="{StaticResource placeHolder}"
-                                    Tag="Кабинет" />
+                                    Tag="Кабинет"
+                                    TextChanged="TextBoxShipmentRoom_TextChanged" />
                                 <ComboBox
                                     x:Name="ComboBoxShipmentLocation"
                                     Margin="0,0,5,5"
                                     IsEditable="True"
                                     IsReadOnly="True"
+                                    SelectionChanged="ComboBoxShipmentLocation_SelectionChanged"
                                     Text="Расположение" />
                             </StackPanel>
                             <ComboBox
                                 x:Name="ComboBoxPrinters"
                                 Margin="0,0,0,5"
+                                DisplayMemberPath="PrinterObject.Name"
                                 IsEditable="True"
                                 IsReadOnly="True"
+                                SelectionChanged="ComboBoxPrinters_SelectionChanged"
                                 Text="Принтер" />
                             <StackPanel Orientation="Horizontal">
                                 <CheckBox
                                     x:Name="CheckBoxAutoFillCartridge"
                                     Margin="0,0,0,5"
+                                    Checked="CheckBoxAutoFillCartridge_Checked"
                                     Content="Auto"
-                                    IsChecked="True" />
+                                    IsChecked="True"
+                                    Unchecked="CheckBoxAutoFillCartridge_Unchecked" />
                                 <ComboBox
                                     x:Name="ComboBoxShipmentCartridge"
                                     Margin="-40,0,0,5"
+                                    DisplayMemberPath="Cartridge.Name"
                                     IsEditable="True"
                                     IsEnabled="False"
                                     IsReadOnly="True"
                                     Text="Картридж" />
                             </StackPanel>
+                            <Button
+                                x:Name="ButtonShipmentCartridge"
+                                Margin="0,0,0,5"
+                                HorizontalAlignment="Center"
+                                Click="ButtonShipmentCartridge_Click"
+                                Content="Сохранить" />
                         </StackPanel>
                     </Grid>
                     <Grid x:Name="GridCommingCartridges" Visibility="Hidden">
                         <StackPanel>
-                            <ComboBox
-                                x:Name="ComboBoxCommingCartridges"
-                                Width="auto"
-                                Margin="0,0,0,5"
-                                DisplayMemberPath="Name"
-                                IsEditable="True"
-                                IsReadOnly="True"
-                                Text="Картридж" />
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox
+                                    x:Name="ComboBoxCommingCartrideLocations"
+                                    Width="auto"
+                                    Margin="0,0,0,5"
+                                    IsEditable="True"
+                                    IsReadOnly="True"
+                                    SelectionChanged="ComboBoxCommingCartrideLocations_SelectionChanged"
+                                    Text="Расположение" />
+                                <ComboBox
+                                    x:Name="ComboBoxCommingCartridges"
+                                    Width="auto"
+                                    Margin="0,0,0,5"
+                                    DisplayMemberPath="Name"
+                                    IsEditable="True"
+                                    IsReadOnly="True"
+                                    Text="Картридж" />
+                            </StackPanel>
                             <TextBox
                                 x:Name="TextBoxCommingCount"
                                 Width="170"
                                 Margin="0,0,0,5"
-                                MaxLength="5"
                                 HorizontalAlignment="Left"
+                                MaxLength="5"
                                 Style="{StaticResource placeHolder}"
                                 Tag="Колличество единиц" />
                             <DatePicker x:Name="DatePickerDateComming" Margin="0,0,0,5" />

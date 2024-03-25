@@ -20,22 +20,22 @@ namespace PrintersApp.Windows
     /// </summary>
     public partial class CartridgeShipment : Window
     {
-        ContextDataBase ctx;
+        //ContextDataBase ctx;
         public CartridgeShipment(ContextDataBase globalctx)
         {
             InitializeComponent();
-            ctx = globalctx;
-            ComboBoxCartridge.ItemsSource = ctx.Cartridges.ToList();
+            //ctx = globalctx;
+            //ComboBoxCartridge.ItemsSource = ctx.Cartridges.ToList();
         }
 
         private void TextBoxRoom_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (((TextBox)sender).Text == "")
-            {
-                ComboBoxPrinter.IsEnabled = false;
-                return;
-            }
-            ComboBoxPrinter.IsEnabled = true;
+            //if (((TextBox)sender).Text == "")
+            //{
+            //    ComboBoxPrinter.IsEnabled = false;
+            //    return;
+            //}
+            //ComboBoxPrinter.IsEnabled = true;
             //var Printers = ctx.PrinterInRooms.Where(p => p.Room == ((TextBox)sender).Text).Join(ctx.Printers,
             //                pr => pr.PrinterId,
             //                p => p.Id,
@@ -59,15 +59,15 @@ namespace PrintersApp.Windows
 
         private void CheckBoxAutoSelect_Unchecked(object sender, RoutedEventArgs e)
         {
-            ComboBoxCartridge.IsEnabled = true;
+            //ComboBoxCartridge.IsEnabled = true;
         }
 
         private void CheckBoxAutoSelect_Checked(object sender, RoutedEventArgs e)
         {
-            if (ComboBoxCartridge == null)
-            {
-                return;
-            }
+            //if (ComboBoxCartridge == null)
+            //{
+            //    return;
+            //}
             //ComboBoxCartridge.SelectedItem = ((Printer)ComboBoxPrinter.SelectedItem).CartridgeObject;
             //ComboBoxCartridge.IsEnabled = false;
         }
@@ -87,9 +87,9 @@ namespace PrintersApp.Windows
             //    CartridgeObject = ctx.Cartridges.FirstOrDefault(p => p.Id == ((Cartridge)ComboBoxCartridge.SelectedItem).Id),
             //    ShipmentDate = DateTime.UtcNow
             //});
-            ctx.Cartridges.FirstOrDefault(p => p.Id == ((Cartridge)ComboBoxCartridge.SelectedItem).Id).StockCount -= 1;
-            ctx.SaveChanges();
-            this.Close();
+            //ctx.Cartridges.FirstOrDefault(p => p.Id == ((Cartridge)ComboBoxCartridge.SelectedItem).Id).StockCount -= 1;
+            //ctx.SaveChanges();
+            //this.Close();
         }
     }
 }

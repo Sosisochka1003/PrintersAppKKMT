@@ -12,8 +12,8 @@ using PrintersApp;
 namespace PrintersApp.Migrations
 {
     [DbContext(typeof(ContextDataBase))]
-    [Migration("20240321133920_update11")]
-    partial class update11
+    [Migration("20240325075407_klema12344")]
+    partial class klema12344
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,7 +21,7 @@ namespace PrintersApp.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("PrinterApp")
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -64,6 +64,9 @@ namespace PrintersApp.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Location")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

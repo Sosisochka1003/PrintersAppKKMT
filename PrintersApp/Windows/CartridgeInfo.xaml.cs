@@ -20,41 +20,41 @@ namespace PrintersApp.Windows
     /// </summary>
     public partial class CartridgeInfo : Window
     {
-        ContextDataBase ctx;
-        Cartridge CurrentCartridge = null;
+        //ContextDataBase ctx;
+        //Cartridge CurrentCartridge = null;
         public CartridgeInfo(ContextDataBase globalctx)
         {
             InitializeComponent();
-            ctx = globalctx;
+            //ctx = globalctx;
         }
 
         public CartridgeInfo(ContextDataBase globalctx, Cartridge updateCartridge)
         {
             InitializeComponent();
-            ctx = globalctx;
-            CurrentCartridge = updateCartridge;
-            TextBoxName.Text = updateCartridge.Name;
-            TextBoxCount.Text = updateCartridge.StockCount.ToString();
+            //ctx = globalctx;
+            //CurrentCartridge = updateCartridge;
+            //TextBoxName.Text = updateCartridge.Name;
+            //TextBoxCount.Text = updateCartridge.StockCount.ToString();
         }
 
         private void ButtonConfirm_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentCartridge == null)
-            {
-                CurrentCartridge = new Cartridge
-                {
-                    Name = TextBoxName.Text,
-                    StockCount = Convert.ToInt32(TextBoxCount.Text),
-                };
-                ctx.Cartridges.Add(CurrentCartridge);
-                ctx.SaveChanges();
-                this.Close();
-            }
-            CurrentCartridge.Name = TextBoxName.Text;
-            CurrentCartridge.StockCount = Convert.ToInt32(TextBoxCount.Text);
-            ctx.Cartridges.Update(CurrentCartridge);
-            ctx.SaveChanges();
-            this.Close();
+            //if (CurrentCartridge == null)
+            //{
+            //    CurrentCartridge = new Cartridge
+            //    {
+            //        Name = TextBoxName.Text,
+            //        StockCount = Convert.ToInt32(TextBoxCount.Text),
+            //    };
+            //    ctx.Cartridges.Add(CurrentCartridge);
+            //    ctx.SaveChanges();
+            //    this.Close();
+            //}
+            //CurrentCartridge.Name = TextBoxName.Text;
+            //CurrentCartridge.StockCount = Convert.ToInt32(TextBoxCount.Text);
+            //ctx.Cartridges.Update(CurrentCartridge);
+            //ctx.SaveChanges();
+            //this.Close();
         }
     }
 }

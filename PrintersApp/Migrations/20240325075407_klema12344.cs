@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PrintersApp.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class klema12344 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,7 +23,8 @@ namespace PrintersApp.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    StockCount = table.Column<int>(type: "integer", nullable: false)
+                    StockCount = table.Column<int>(type: "integer", nullable: false),
+                    Location = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,7 +39,8 @@ namespace PrintersApp.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    InventoryNumber = table.Column<int>(type: "integer", nullable: false)
+                    InventoryNumber = table.Column<long>(type: "bigint", nullable: false),
+                    Location = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,6 +55,7 @@ namespace PrintersApp.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     CartridgeId = table.Column<int>(type: "integer", nullable: false),
+                    Location = table.Column<int>(type: "integer", nullable: false),
                     Count = table.Column<int>(type: "integer", nullable: false),
                     CommingDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -104,7 +107,7 @@ namespace PrintersApp.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Room = table.Column<string>(type: "text", nullable: false),
+                    Room = table.Column<string>(type: "text", nullable: true),
                     PrinterId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>

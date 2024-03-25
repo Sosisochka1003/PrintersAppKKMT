@@ -20,27 +20,27 @@ namespace PrintersApp.Windows
     /// </summary>
     public partial class CartridgeComming : Window
     {
-        ContextDataBase ctx;
+        //ContextDataBase ctx;
         public CartridgeComming(ContextDataBase globalctx)
         {
             InitializeComponent();
-            ctx = globalctx;
-            ComboBoxCartridge.ItemsSource = ctx.Cartridges.ToList();
+            //ctx = globalctx;
+            //ComboBoxCartridge.ItemsSource = ctx.Cartridges.ToList();
         }
 
         private void ButtonComming_Click(object sender, RoutedEventArgs e)
         {
             DateTime TimeComming = DateTime.SpecifyKind((DateTime)DatePickerDateComming.SelectedDate, DateTimeKind.Utc);
-            ctx.Commings.Add(new Comming
-            {
-                CartridgeId = ((Cartridge)ComboBoxCartridge.SelectedItem).Id,
-                CartridgeObject = (Cartridge)ComboBoxCartridge.SelectedItem,
-                Count = Convert.ToInt32(TextBoxCountComming.Text),
-                CommingDate = TimeComming
-            });
-            ctx.Cartridges.FirstOrDefault(p => p.Id == ((Cartridge)ComboBoxCartridge.SelectedItem).Id).StockCount += Convert.ToInt32(TextBoxCountComming.Text);
-            ctx.SaveChanges();
-            this.Close();
+            //ctx.Commings.Add(new Comming
+            //{
+            //    CartridgeId = ((Cartridge)ComboBoxCartridge.SelectedItem).Id,
+            //    CartridgeObject = (Cartridge)ComboBoxCartridge.SelectedItem,
+            //    Count = Convert.ToInt32(TextBoxCountComming.Text),
+            //    CommingDate = TimeComming
+            //});
+            //ctx.Cartridges.FirstOrDefault(p => p.Id == ((Cartridge)ComboBoxCartridge.SelectedItem).Id).StockCount += Convert.ToInt32(TextBoxCountComming.Text);
+            //ctx.SaveChanges();
+            //this.Close();
         }
     }
 }

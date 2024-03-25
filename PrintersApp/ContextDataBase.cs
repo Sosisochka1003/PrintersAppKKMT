@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Security.Policy;
+using System.Windows;
 
 namespace PrintersApp
 {
@@ -15,12 +16,21 @@ namespace PrintersApp
     {
         public ContextDataBase() 
         {
-            Database.EnsureCreated();
+            try
+            {
+                Database.EnsureCreated();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка подключения к базе данных");
+                System.Windows.Application.Current.Shutdown();
+            }
         }
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
+
             optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=postgres;Username=postgres;Password=123");
         }
 
@@ -50,7 +60,7 @@ namespace PrintersApp
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }
             public required string Name { get; set; }
-            public Int64 InventoryNumber { get; set; }
+            public required string InventoryNumber { get; set; }
             public VarLocation Location { get; set; }
         }
 
@@ -80,6 +90,7 @@ namespace PrintersApp
             [ForeignKey(nameof(Cartridge))]
             public int CartridgeId { get; set; }
             public required Cartridge CartridgeObject { get; set; }
+            public required VarLocation Location { get; set; }
             public int Count { get; set; }
             public required DateTime CommingDate { get; set; }
         }

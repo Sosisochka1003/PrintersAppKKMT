@@ -27,7 +27,7 @@ namespace PrintersApp
             InitializeComponent();
             FrameCartridge.Navigate(new CartridgePage(ctx));
             FramePrinters.Navigate(new PrintersPage(ctx));
-            FrameReports.Navigate(new ReportsPage());
+            FrameReports.Navigate(new ReportsPage(ctx));
         }
 
         

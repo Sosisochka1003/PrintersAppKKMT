@@ -26,13 +26,19 @@
                     </StackPanel>
                     <TextBox
                         Name="TextBoxCommings"
+                        Height="450"
                         IsReadOnly="True"
                         ScrollViewer.CanContentScroll="True"
                         ScrollViewer.HorizontalScrollBarVisibility="Visible"
                         ScrollViewer.VerticalScrollBarVisibility="Visible" />
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Excel" />
+            <TabItem Header="Excel">
+                <Button
+                    x:Name="ButtonCommingReport"
+                    Click="ButtonCommingReport_Click"
+                    Content="Поставки" />
+            </TabItem>
         </TabControl>
     </Grid>
 </Page>

@@ -67,28 +67,65 @@ namespace PrintersApp
             }
         }
 
-        public static void CartridgeComming(ContextDataBase ctx)
+        public static async void CartridgeComming(ContextDataBase ctx)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.DefaultExt = "xlsx";
-            saveFileDialog.FileName = $"Отчет по приходу картриджей";
+            saveFileDialog.FileName = $"Отчет по приходу картриджей {DateTime.Now.Day} {DateTime.Now.Month} {DateTime.Now.Year}";
             if (saveFileDialog.ShowDialog() == true)
             {
                 using (SLDocument Doc = new SLDocument())
                 {
-                    Doc.SetCellValue(1, 1, "Номер записи");
+                    //Doc.SetCellValue(1, 1, "Номер записи");
+                    //Doc.SetCellValue(1, 2, "Картридж");
+                    //Doc.SetCellValue(1, 3, "Пришло");
+                    //Doc.SetCellValue(1, 4, "Дата прихода");
+                    //Doc.SetCellValue(1, 5, $"Дата генерации файла:{DateTime.Now}");
+
+                    Doc.SetCellValue(1, 1, "Дата прихода");
                     Doc.SetCellValue(1, 2, "Картридж");
-                    Doc.SetCellValue(1, 3, "Пришло");
-                    Doc.SetCellValue(1, 4, "Дата прихода");
+                    Doc.SetCellValue(1, 3, "Расположение");
+                    Doc.SetCellValue(1, 4, "Пришло");
                     Doc.SetCellValue(1, 5, $"Дата генерации файла:{DateTime.Now}");
+
                     var commings = ctx.Commings.ToList();
-                    for (int i = 0; i < commings.Count; i++)
+                    var query = ctx.Commings
+                        .GroupBy(c => new { c.CommingDate, c.CartridgeId, c.Location })
+                        .Select(g => new
+                        {
+                            CommingDate = g.Key.CommingDate,
+                            CartridgeId = g.Key.CartridgeId,
+                            Locations = g.Key.Location,
+                            Counts = g.Sum(c => c.Count)
+                        }).OrderBy(g => g.CommingDate).ToList();
+                    //for (int i = 0; i < query.Count(); i++)
+                    //{
+                    //    Doc.SetCellValue(i + 2, 1, $"{commings[i].Id}");
+                    //    Doc.SetCellValue(i + 2, 2, $"{ctx.Cartridges.FirstOrDefault(p => p.Id == commings[i].CartridgeId).Name}");
+                    //    Doc.SetCellValue(i + 2, 3, $"{commings[i].Count}");
+                    //    Doc.SetCellValue(i + 2, 4, $"{commings[i].CommingDate}");
+                    //}
+                    int j = 0;
+                    DateTime lastDate = new DateTime();
+                    foreach (var item in query)
                     {
-                        Doc.SetCellValue(i + 2, 1, $"{commings[i].Id}");
-                        Doc.SetCellValue(i + 2, 2, $"{ctx.Cartridges.FirstOrDefault(p => p.Id == commings[i].CartridgeId).Name}");
-                        Doc.SetCellValue(i + 2, 3, $"{commings[i].Count}");
-                        Doc.SetCellValue(i + 2, 4, $"{commings[i].CommingDate}");
+                        if (j < query.Count)
+                        {
+                            if (lastDate != item.CommingDate)
+                            {
+                                Doc.SetCellValue(j + 2, 1, $"{item.CommingDate}");
+                            }
+                            using (ContextDataBase tempctx = new ContextDataBase())
+                            {
+                                Doc.SetCellValue(j + 2, 2, $"{tempctx.Cartridges.FirstOrDefault(p => p.Id == item.CartridgeId).Name}");
+                                Doc.SetCellValue(j + 2, 3, $"{item.Locations}");
+                                Doc.SetCellValue(j + 2, 4, $"{item.Counts}");
+                                j++;
+                                lastDate = item.CommingDate;
+                            }
+                        }
                     }
+
                     Doc.SaveAs(saveFileDialog.FileName);
                 }
             }

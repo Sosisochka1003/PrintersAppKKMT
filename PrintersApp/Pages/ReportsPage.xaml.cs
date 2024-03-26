@@ -51,13 +51,32 @@ namespace PrintersApp.Pages
                     Locations = g.Key.Location,
                     Counts = g.Sum(c => c.Count)
                 }).OrderBy(g => g.CommingDate);
+            DateTime lastDate = new DateTime();
             foreach (var group in query)
             {
-                TextBoxCommings.Text += "Дата: " + group.CommingDate + "\n";
-                TextBoxCommings.Text += "Картридж: " + group.CartridgeId + "\n";
-                TextBoxCommings.Text += "Расположение: " + group.Locations + "\n";
-                TextBoxCommings.Text += "Кол-во: " + group.Counts + "\n" + "\n";
+                if (lastDate != group.CommingDate)
+                {
+                    TextBoxCommings.Text += "\n" + "Дата: " + group.CommingDate + "\n";
+                }
+                using (ContextDataBase tempctx = new ContextDataBase())
+                {
+                    var temp = tempctx.Cartridges.FirstOrDefault(x => x.Id == group.CartridgeId);
+                    TextBoxCommings.Text += "   Картридж: " + temp.Name;
+                    TextBoxCommings.Text += "  Расположение: " + group.Locations;
+                    TextBoxCommings.Text += "  Кол-во: " + group.Counts;
+                    lastDate = group.CommingDate;
+                    if (lastDate == group.CommingDate)
+                    {
+                        TextBoxCommings.Text += "\n";
+                    }
+
+                }
             }
+        }
+
+        private void ButtonCommingReport_Click(object sender, RoutedEventArgs e)
+        {
+            ExcelReports.CartridgeComming(ctx);
         }
     }
 }

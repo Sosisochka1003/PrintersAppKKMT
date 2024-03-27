@@ -15,14 +15,14 @@
             <TabItem Header="Изменения">
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <ComboBox Margin="0,5,0,5">
+                        <ComboBox
+                            x:Name="ComboBoxReports"
+                            Margin="0,5,0,5"
+                            SelectionChanged="ComboBoxReports_SelectionChanged">
                             <ComboBoxItem Content="Поставки" />
                             <ComboBoxItem Content="Выдачи" />
+                            <ComboBoxItem Content="Остатки" />
                         </ComboBox>
-                        <Button
-                            x:Name="ButtonGetResult"
-                            Click="ButtonGetResult_Click"
-                            Content="Выборка" />
                     </StackPanel>
                     <TextBox
                         Name="TextBoxCommings"
@@ -34,10 +34,23 @@
                 </StackPanel>
             </TabItem>
             <TabItem Header="Excel">
-                <Button
-                    x:Name="ButtonCommingReport"
-                    Click="ButtonCommingReport_Click"
-                    Content="Поставки" />
+                <StackPanel>
+                    <Button
+                        x:Name="ButtonCommingReport"
+                        Margin="0,5,0,5"
+                        Click="ButtonCommingReport_Click"
+                        Content="Поставки" />
+                    <Button
+                        x:Name="ButtonStackCountCartridgesReport"
+                        Margin="0,0,0,5"
+                        Click="ButtonStackCountCartridgesReport_Click"
+                        Content="Остатки" />
+                    <Button
+                        x:Name="ButtonShipmentsReport"
+                        Margin="0,0,0,5"
+                        Click="ButtonShipmentsReport_Click"
+                        Content="Расход" />
+                </StackPanel>
             </TabItem>
         </TabControl>
     </Grid>

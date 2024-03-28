@@ -47,7 +47,7 @@
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.Id, Mode=TwoWay}" Header="Код" />
+                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.Id, Mode=TwoWay}" Header="№" />
                         <DataGridTextColumn Binding="{Binding Path=PrinterObject.Name, Mode=TwoWay}" Header="Наименование" />
                         <DataGridTextColumn Binding="{Binding Path=PrinterObject.Location, Mode=TwoWay}" Header="Расположение" />
                         <DataGridTextColumn Binding="{Binding Path=Room, Mode=TwoWay}" Header="Кабинет" />

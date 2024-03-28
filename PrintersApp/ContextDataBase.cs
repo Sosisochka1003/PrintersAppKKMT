@@ -73,7 +73,7 @@ namespace PrintersApp
             public required Printer PrinterObject { get; set; }
         }
 
-        public class Cartridge  
+        public class Cartridge
         {
             [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
             public int Id { get; set; }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -34,7 +35,7 @@ namespace PrintersApp.Pages
             InitializeComponent();
             this.ctx = ctx;
             Cartridges = new BindingList<Cartridge>(ctx.Cartridges.ToList());
-            DataGridCartridges.ItemsSource = Cartridges;
+            DataGridCartridges.ItemsSource = Cartridges.OrderBy(x => x.Name);
             ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
             TextBoxStockCount.MaxLength = 2;
         }
@@ -125,8 +126,7 @@ namespace PrintersApp.Pages
                 return;
             }
             var paramSearch = ((TextBox)sender).Text.ToLower();
-            var searchCartridges = Cartridges;
-            DataGridCartridges.ItemsSource = searchCartridges.Where(c => c.Id.ToString() == paramSearch || 
+            DataGridCartridges.ItemsSource = Cartridges.Where(c => c.Id.ToString() == paramSearch || 
                                                                     c.Name.ToLower().Contains(paramSearch) || 
                                                                     c.Location.ToString().ToLower().Contains(paramSearch));
         }
@@ -307,6 +307,74 @@ namespace PrintersApp.Pages
             }
             
 
+        }
+
+        private void DataGridCartridges_Sorting(object sender, DataGridSortingEventArgs e)
+        {
+            //if (e.Column.SortDirection.ToString() == ListSortDirection.Descending.ToString())
+            //{
+            //    switch (e.Column.Header)
+            //    {
+            //        case "Наименование":
+            //            DataGridCartridges.ItemsSource = Cartridges.OrderByDescending(x => x.Name);
+            //            break;
+            //        case "Кол-во на складе":
+            //            DataGridCartridges.ItemsSource = Cartridges.OrderByDescending(x => x.StockCount);
+            //            break;
+            //        case "Расположение":
+            //            DataGridCartridges.ItemsSource = Cartridges.OrderByDescending(x => x.Location);
+            //            break;
+            //        default:
+            //            Cartridges.OrderByDescending(x => x.Id);
+            //            break;
+            //    }
+            //}
+            //else if (e.Column.SortDirection == ListSortDirection.Ascending)
+            //{
+            //    switch (e.Column.Header)
+            //    {
+            //        case "Наименование":
+            //            DataGridCartridges.ItemsSource = Cartridges.OrderBy(x => x.Name);
+            //            break;
+            //        case "Кол-во на складе":
+            //            DataGridCartridges.ItemsSource = Cartridges.OrderBy(x => x.StockCount);
+            //            break;
+            //        case "Расположение":
+            //            DataGridCartridges.ItemsSource = Cartridges.OrderBy(x => x.Location);
+            //            break;
+            //        default:
+            //            Cartridges.OrderBy(x => x.Id);
+            //            break;
+            //    }
+            //}
+            
+            // Отмена сортировки, если столбец не поддерживает сортировку
+            if (!e.Column.SortDirection.HasValue) return;
+
+            // Получение свойства, соответствующего столбцу
+            string propertyName = e.Column.SortMemberPath;
+
+            // Получение текущего списка данных
+            List<Cartridge> cartridges = ((BindingList<Cartridge>)DataGridCartridges.ItemsSource).ToList();
+            if (cartridges == null) return;
+
+            // Сортировка списка данных
+            if (e.Column.SortDirection.Value == ListSortDirection.Ascending)
+            {
+                cartridges.OrderBy(x => x.Name);
+                //cartridges.Sort((x, y) => x.GetType().GetProperty(Name)?.GetValue(x)?.ToString().CompareTo(y.GetType().GetProperty(Name)?.GetValue(y)?.ToString()) ?? 0);
+            }
+            else
+            {
+                cartridges.OrderByDescending(x => x.Name);
+                //cartridges.Sort((x, y) => y.GetType().GetProperty(Name)?.GetValue(y)?.ToString().CompareTo(x.GetType().GetProperty(Name)?.GetValue(x)?.ToString()) ?? 0);
+            }
+
+            // Обновление источника данных
+            DataGridCartridges.ItemsSource = cartridges;
+
+            // Отмена стандартной сортировки
+            e.Handled = true;
         }
     }
 }

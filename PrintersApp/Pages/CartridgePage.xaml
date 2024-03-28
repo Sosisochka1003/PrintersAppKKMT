@@ -19,7 +19,7 @@
                     Margin="0,0,5,0"
                     MaxLength="120"
                     Style="{StaticResource placeHolder}"
-                    Tag=""
+                    Tag="Поиск"
                     TextChanged="TextBoxSearch_TextChanged" />
                 <Button
                     x:Name="ButtonFilter"
@@ -48,6 +48,8 @@
                     x:Name="DataGridCartridges"
                     Margin="0,5,0,0"
                     AutoGenerateColumns="False"
+                    CanUserSortColumns="True"
+                    Sorting="DataGridCartridges_Sorting"
                     IsReadOnly="True"
                     ItemsSource="{Binding Cartridges}">
                     <DataGrid.ContextMenu>
@@ -66,7 +68,7 @@
                         <DataGridTextColumn
                             Width="45"
                             MaxWidth="45"
-                            Binding="{Binding Path=Id, Mode=TwoWay}"
+                            Binding="{Binding Path=Id}"
                             Header="№" />
                         <DataGridTextColumn
                             Width="200"

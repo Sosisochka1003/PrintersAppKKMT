@@ -1,4 +1,5 @@
 ﻿using PrintersApp.Pages;
+using PrintersApp.Windows;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +26,7 @@ namespace PrintersApp
         public StartWindow()
         {
             InitializeComponent();
+
             FrameCartridge.Navigate(new CartridgePage(ctx));
             FramePrinters.Navigate(new PrintersPage(ctx));
             FrameReports.Navigate(new ReportsPage(ctx));

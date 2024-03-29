@@ -49,9 +49,9 @@
                     Margin="0,5,0,0"
                     AutoGenerateColumns="False"
                     CanUserSortColumns="True"
-                    Sorting="DataGridCartridges_Sorting"
                     IsReadOnly="True"
-                    ItemsSource="{Binding Cartridges}">
+                    ItemsSource="{Binding Cartridge1}"
+                    Sorting="DataGridCartridges_Sorting">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem
@@ -68,7 +68,7 @@
                         <DataGridTextColumn
                             Width="45"
                             MaxWidth="45"
-                            Binding="{Binding Path=Id}"
+                            Binding="{Binding Path=Id, Mode=TwoWay}"
                             Header="№" />
                         <DataGridTextColumn
                             Width="200"
@@ -82,7 +82,7 @@
                             Header="Кол-во на складе" />
                         <DataGridTextColumn
                             MaxWidth="200"
-                            Binding="{Binding Path=Location}"
+                            Binding="{Binding Path=Location, Mode=TwoWay}"
                             Header="Расположение" />
                     </DataGrid.Columns>
                 </DataGrid>

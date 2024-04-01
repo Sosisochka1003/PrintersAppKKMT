@@ -51,7 +51,8 @@ namespace PrintersApp
             Первый,
             Второй,
             ККМТ,
-            ТТД
+            ТТД,
+            Общий
         }
 
         public class Printer

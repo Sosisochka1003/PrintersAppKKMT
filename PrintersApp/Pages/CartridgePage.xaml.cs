@@ -30,6 +30,7 @@ namespace PrintersApp.Pages
         ContextDataBase ctx;
         Cartridge? pickCartridge;
         public List<Cartridge> Cartridges { get; set; } = new List<Cartridge>();
+        public VarLocation currentLocation;
         public CartridgePage(ContextDataBase ctx)
         {
             InitializeComponent();
@@ -38,7 +39,7 @@ namespace PrintersApp.Pages
             DataGridCartridges.ItemsSource = Cartridges;
 
             ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
-            TextBoxStockCount.MaxLength = 2;
+            ComboBoxFilterLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
         }
 
         private void ButtonShowGrid_Click(object sender, RoutedEventArgs e)
@@ -85,6 +86,8 @@ namespace PrintersApp.Pages
             ctx.Cartridges.Remove(deleteItem);
             await ctx.SaveChangesAsync();
             Cartridges.Remove(deleteItem);
+            DataGridCartridges.ItemsSource = Cartridges = new List<Cartridge>(ctx.Cartridges.ToList());
+            searchCartridges();
         }
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
@@ -105,6 +108,8 @@ namespace PrintersApp.Pages
                 ctx.Cartridges.Add(newCartridge);
                 await ctx.SaveChangesAsync();
                 Cartridges.Add(newCartridge);
+                DataGridCartridges.ItemsSource = Cartridges = new List<Cartridge>(ctx.Cartridges.ToList());
+                searchCartridges();
                 GridAddEditElement.Visibility = Visibility.Hidden;
                 return;
             }
@@ -114,27 +119,30 @@ namespace PrintersApp.Pages
             ctx.Cartridges.Update(pickCartridge);
             await ctx.SaveChangesAsync();
             GridAddEditElement.Visibility = Visibility.Hidden;
-            //Cartridges.ResetItem(Cartridges.IndexOf(pickCartridge));
             DataGridCartridges.ItemsSource = Cartridges = new List<Cartridge>(ctx.Cartridges.ToList());
-            TextBoxSearch.Text = null;
+            searchCartridges();
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (((TextBox)sender).Text == "" || ((TextBox)sender).Text == "Поиск")
-            {
-                DataGridCartridges.ItemsSource = Cartridges;
-                return;
-            }
-            var paramSearch = ((TextBox)sender).Text.ToLower();
-            DataGridCartridges.ItemsSource = Cartridges.Where(c => c.Id.ToString() == paramSearch || 
-                                                                    c.Name.ToLower().Contains(paramSearch) || 
-                                                                    c.Location.ToString().ToLower().Contains(paramSearch));
+            searchCartridges();
         }
 
-        private void ButtonFilter_Click(object sender, RoutedEventArgs e)
+        private void searchCartridges()
         {
-            
+            if (TextBoxSearch.Text == "" || TextBoxSearch.Text == "Поиск")
+            {
+                DataGridCartridges.ItemsSource = currentLocation == VarLocation.Общий? Cartridges : Cartridges.Where(c => c.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()));
+                return;
+            }
+            DataGridCartridges.ItemsSource = currentLocation == VarLocation.Общий? 
+                                                    Cartridges.Where(c => c.Id.ToString() == TextBoxSearch.Text ||
+                                                                    c.Name.ToLower().Contains(TextBoxSearch.Text))
+                                                        : 
+                                                    Cartridges.Where(c => c.Name.ToLower().Contains(TextBoxSearch.Text) &&
+                                                                    c.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.Id.ToString() == TextBoxSearch.Text &&
+                                                                    c.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()));
         }
 
         private void Page_KeyDown(object sender, KeyEventArgs e)
@@ -142,7 +150,7 @@ namespace PrintersApp.Pages
             if (e.Key == Key.F5)
             {
                 DataGridCartridges.ItemsSource = new List<Cartridge>(ctx.Cartridges.ToList());
-                TextBoxSearch.Text = null;
+                searchCartridges();
                 MessageBox.Show("Обновлено");
             }
         }
@@ -216,6 +224,7 @@ namespace PrintersApp.Pages
             ctx.Cartridges.FirstOrDefault(x => x == (Cartridge)ComboBoxCommingCartridges.SelectedItem).StockCount += count;
             await ctx.SaveChangesAsync();
             DataGridCartridges.ItemsSource = Cartridges = new List<Cartridge>(ctx.Cartridges.ToList());
+            searchCartridges();
             GridCommingCartridges.Visibility = Visibility.Hidden;
         }
 
@@ -269,6 +278,7 @@ namespace PrintersApp.Pages
             ctx.Cartridges.FirstOrDefault(x => x.Id == ((PrinterCartridge)ComboBoxShipmentCartridge.SelectedItem).Cartridge.Id).StockCount--;
             await ctx.SaveChangesAsync();
             DataGridCartridges.ItemsSource = Cartridges = new List<Cartridge>(ctx.Cartridges.ToList());
+            searchCartridges();
             GridShipmentCartridge.Visibility= Visibility.Hidden;
             MessageBox.Show("Выдалось");
         }
@@ -310,72 +320,35 @@ namespace PrintersApp.Pages
 
         }
 
-        private void DataGridCartridges_Sorting(object sender, DataGridSortingEventArgs e)
+        private void ComboBoxFilterLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (e.Column.SortDirection.ToString() == ListSortDirection.Descending.ToString())
-            //{
-            //    switch (e.Column.Header)
-            //    {
-            //        case "Наименование":
-            //            DataGridCartridges.ItemsSource = Cartridges.OrderByDescending(x => x.Name);
-            //            break;
-            //        case "Кол-во на складе":
-            //            DataGridCartridges.ItemsSource = Cartridges.OrderByDescending(x => x.StockCount);
-            //            break;
-            //        case "Расположение":
-            //            DataGridCartridges.ItemsSource = Cartridges.OrderByDescending(x => x.Location);
-            //            break;
-            //        default:
-            //            Cartridges.OrderByDescending(x => x.Id);
-            //            break;
-            //    }
-            //}
-            //else if (e.Column.SortDirection == ListSortDirection.Ascending)
-            //{
-            //    switch (e.Column.Header)
-            //    {
-            //        case "Наименование":
-            //            DataGridCartridges.ItemsSource = Cartridges.OrderBy(x => x.Name);
-            //            break;
-            //        case "Кол-во на складе":
-            //            DataGridCartridges.ItemsSource = Cartridges.OrderBy(x => x.StockCount);
-            //            break;
-            //        case "Расположение":
-            //            DataGridCartridges.ItemsSource = Cartridges.OrderBy(x => x.Location);
-            //            break;
-            //        default:
-            //            Cartridges.OrderBy(x => x.Id);
-            //            break;
-            //    }
-            //}
-            
-            // Отмена сортировки, если столбец не поддерживает сортировку
-            //if (!e.Column.SortDirection.HasValue) return;
-
-            //// Получение свойства, соответствующего столбцу
-            //string propertyName = e.Column.SortMemberPath;
-
-            //// Получение текущего списка данных
-            //List<Cartridge> cartridges = (DataGridCartridges.ItemsSource as BindingList<Cartridge>).ToList();
-            //if (cartridges == null) return;
-
-            //// Сортировка списка данных
-            //if (e.Column.SortDirection.Value == ListSortDirection.Ascending)
-            //{
-            //    cartridges.OrderBy(x => x.StockCount);
-            //    //cartridges.Sort((x, y) => x.GetType().GetProperty(propertyName)?.GetValue(x)?.ToString().CompareTo(y.GetType().GetProperty(propertyName)?.GetValue(y)?.ToString()) ?? 0);
-            //}
-            //else
-            //{
-            //    cartridges.OrderByDescending(x => x.StockCount);
-            //    //cartridges.Sort((x, y) => y.GetType().GetProperty(propertyName)?.GetValue(y)?.ToString().CompareTo(x.GetType().GetProperty(propertyName)?.GetValue(x)?.ToString()) ?? 0);
-            //}
-
-            //// Обновление источника данных
-            //DataGridCartridges.ItemsSource = new BindingList<Cartridge>(cartridges);
-
-            //// Отмена стандартной сортировки
-            ////e.Handled = true;
+            switch (ComboBoxFilterLocation.SelectedValue.ToString())
+            {
+                case "Первый":
+                    currentLocation = VarLocation.Первый;
+                    searchCartridges();
+                    break;
+                case "Второй":
+                    currentLocation = VarLocation.Второй;
+                    searchCartridges();
+                    break;
+                case "ККМТ":
+                    currentLocation = VarLocation.ККМТ;
+                    searchCartridges();
+                    break;
+                case "ТТД":
+                    currentLocation = VarLocation.ТТД;
+                    searchCartridges();
+                    break;
+                case "Общий":
+                    currentLocation = VarLocation.Общий;
+                    searchCartridges();
+                    break;
+                default:
+                    currentLocation = VarLocation.Первый;
+                    searchCartridges();
+                    break;
+            }
         }
     }
 }

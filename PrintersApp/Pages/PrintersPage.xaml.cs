@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PrintersApp.Windows;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -29,14 +30,16 @@ namespace PrintersApp.Pages
         }
         ContextDataBase ctx;
         PrinterInRoom? pickPrinter;
-        public BindingList<PrinterInRoom> Printers { get; set; } = new BindingList<PrinterInRoom>();
+        public List<PrinterInRoom> Printers { get; set; } = new List<PrinterInRoom>();
+        public VarLocation currentLocation;
         public PrintersPage(ContextDataBase ctx)
         {
             InitializeComponent();
             this.ctx = ctx;
-            Printers = new BindingList<PrinterInRoom>(ctx.PrinterInRooms.ToList());
+            Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
             DataGridPrinters.ItemsSource = Printers;
             ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
+            ComboBoxFilterLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
             var Cartridges = ctx.Cartridges.Select(c => new CartridgeWithBool { cartridge = c, isSelected = false }).ToList();
             ComboBoxCompabilityCartridges.ItemsSource = Cartridges;
             var test = ctx.Printers.ToList();
@@ -62,11 +65,6 @@ namespace PrintersApp.Pages
             }
         }
 
-        private void ButtonFilter_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
             GridAddEditElement.Visibility = Visibility.Visible;
@@ -89,23 +87,35 @@ namespace PrintersApp.Pages
             ctx.PrinterInRooms.Remove(deletePrinter);
             ctx.Printers.Remove(ctx.Printers.FirstOrDefault(x => x.Id == deletePrinter.PrinterId));
             await ctx.SaveChangesAsync();
-            Printers.Remove(deletePrinter);
+            DataGridPrinters.ItemsSource = Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
+            searchPrinters();
+        }
+
+        private void searchPrinters()
+        {
+            string param = TextBoxSearch.Text.ToLower();
+            if (param == "" || param == "поиск")
+            {
+                DataGridPrinters.ItemsSource = currentLocation == VarLocation.Общий ? Printers: Printers.Where(c => c.PrinterObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()));
+                return;
+            }
+            DataGridPrinters.ItemsSource = currentLocation == VarLocation.Общий ?
+                                                    Printers.Where(c => c.PrinterObject.Id.ToString() == param ||
+                                                                    c.PrinterObject.Name.ToLower().Contains(param))
+                                                        :
+                                                    Printers.Where(c => c.PrinterObject.Id.ToString().Contains(param) &&
+                                                                    c.PrinterObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.PrinterObject.Name.ToString().ToLower().Contains(param) &&
+                                                                    c.PrinterObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.Room.ToString().ToLower().Contains(param) &&
+                                                                    c.PrinterObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.PrinterObject.InventoryNumber.ToString().ToLower().Contains(param) &&
+                                                                    c.PrinterObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()));
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (((TextBox)sender).Text == "" || ((TextBox)sender).Text == "Поиск")
-            {
-                DataGridPrinters.ItemsSource = Printers;
-                return;
-            }
-            string paramSearch = ((TextBox)sender).Text.ToLower();
-            var searchPrinters = Printers;
-            DataGridPrinters.ItemsSource = searchPrinters.Where(p => p.PrinterObject.Id.ToString() == paramSearch ||  
-                                                                     p.Room.ToString() == paramSearch || 
-                                                                     p.PrinterObject.InventoryNumber.ToString().ToLower().Contains(paramSearch)|| 
-                                                                     p.PrinterObject.Name.ToLower().Contains(paramSearch) || 
-                                                                     p.PrinterObject.Location.ToString().ToLower().Contains(paramSearch)).ToList();
+            searchPrinters();
         }
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
@@ -139,8 +149,8 @@ namespace PrintersApp.Pages
                         }
                     }
                     await ctx.SaveChangesAsync();
-                    Printers.ResetItem(Printers.IndexOf(pickPrinter));
-                    DataGridPrinters.ItemsSource = Printers;
+                    DataGridPrinters.ItemsSource = Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
+                    searchPrinters();
                     GridAddEditElement.Visibility = Visibility.Hidden;
                     return;
                 }
@@ -179,7 +189,8 @@ namespace PrintersApp.Pages
                 }
             }
             await ctx.SaveChangesAsync();
-            Printers.Add(newPrinterInRoom);
+            DataGridPrinters.ItemsSource = Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
+            searchPrinters();
             GridAddEditElement.Visibility = Visibility.Hidden;
         }
 
@@ -187,9 +198,40 @@ namespace PrintersApp.Pages
         {
             if (e.Key == Key.F5)
             {
-                DataGridPrinters.ItemsSource = Printers = new BindingList<PrinterInRoom>(ctx.PrinterInRooms.ToList());
-                TextBoxSearch.Text = null;
+                DataGridPrinters.ItemsSource = Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
+                searchPrinters();
                 MessageBox.Show("Обновлено");
+            }
+        }
+
+        private void ComboBoxFilterLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            switch (ComboBoxFilterLocation.SelectedValue.ToString())
+            {
+                case "Первый":
+                    currentLocation = VarLocation.Первый;
+                    searchPrinters();
+                    break;
+                case "Второй":
+                    currentLocation = VarLocation.Второй;
+                    searchPrinters();
+                    break;
+                case "ККМТ":
+                    currentLocation = VarLocation.ККМТ;
+                    searchPrinters();
+                    break;
+                case "ТТД":
+                    currentLocation = VarLocation.ТТД;
+                    searchPrinters();
+                    break;
+                case "Общий":
+                    currentLocation = VarLocation.Общий;
+                    searchPrinters();
+                    break;
+                default:
+                    currentLocation = VarLocation.Первый;
+                    searchPrinters();
+                    break;
             }
         }
     }

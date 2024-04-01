@@ -21,11 +21,14 @@
                     Style="{StaticResource placeHolder}"
                     Tag="Поиск"
                     TextChanged="TextBoxSearch_TextChanged" />
-                <Button
-                    x:Name="ButtonFilter"
+                <ComboBox
+                    x:Name="ComboBoxFilterLocation"
                     Margin="0,0,5,0"
-                    Click="ButtonFilter_Click"
-                    Content="Фильтр" />
+                    IsEditable="True"
+                    IsReadOnly="True"
+                    SelectedIndex="4"
+                    SelectionChanged="ComboBoxFilterLocation_SelectionChanged"
+                    Text="Расположение" />
                 <CheckBox Margin="0,0,5,0" Content="Фильтр 1" />
                 <Button
                     x:Name="ButtonShowGrid"
@@ -48,10 +51,10 @@
                     x:Name="DataGridCartridges"
                     Margin="0,5,0,0"
                     AutoGenerateColumns="False"
+                    CanUserReorderColumns="False"
                     CanUserSortColumns="True"
                     IsReadOnly="True"
-                    ItemsSource="{Binding Cartridge1}"
-                    Sorting="DataGridCartridges_Sorting">
+                    ItemsSource="{Binding Cartridge1}">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem

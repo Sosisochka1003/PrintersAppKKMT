@@ -36,7 +36,10 @@
                     Content="Добавить" />
             </StackPanel>
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
-                <DataGrid x:Name="DataGridPrinters" AutoGenerateColumns="False">
+                <DataGrid
+                    x:Name="DataGridPrinters"
+                    AutoGenerateColumns="False"
+                    CanUserReorderColumns="False">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem
@@ -50,11 +53,27 @@
                         </ContextMenu>
                     </DataGrid.ContextMenu>
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.Id, Mode=TwoWay}" Header="№" />
-                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.Name, Mode=TwoWay}" Header="Наименование" />
-                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.Location, Mode=TwoWay}" Header="Расположение" />
-                        <DataGridTextColumn Binding="{Binding Path=Room, Mode=TwoWay}" Header="Кабинет" />
-                        <DataGridTextColumn Binding="{Binding Path=PrinterObject.InventoryNumber, Mode=TwoWay}" Header="Инвентарный номер" />
+                        <DataGridTextColumn
+                            Binding="{Binding Path=PrinterObject.Id, Mode=TwoWay}"
+                            CanUserResize="False"
+                            Header="№" />
+                        <DataGridTextColumn
+                            MaxWidth="300"
+                            Binding="{Binding Path=PrinterObject.Name, Mode=TwoWay}"
+                            Header="Наименование" />
+                        <DataGridTextColumn
+                            Binding="{Binding Path=PrinterObject.Location, Mode=TwoWay}"
+                            CanUserResize="False"
+                            Header="Расположение" />
+                        <DataGridTextColumn
+                            Width="100"
+                            Binding="{Binding Path=Room, Mode=TwoWay}"
+                            CanUserResize="False"
+                            Header="Кабинет" />
+                        <DataGridTextColumn
+                            MaxWidth="200"
+                            Binding="{Binding Path=PrinterObject.InventoryNumber, Mode=TwoWay}"
+                            Header="Инвентарный номер" />
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid x:Name="GridAddEditElement" Visibility="Hidden">

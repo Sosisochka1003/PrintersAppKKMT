@@ -42,6 +42,12 @@
                                     </TextBox.Style>
                                 </TextBox>
                             </Grid>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsFocused" Value="True">
+                                    <Setter TargetName="textSource" Property="BorderBrush" Value="#006cd4" />
+                                    <Setter TargetName="textSource" Property="BorderThickness" Value="1.5" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

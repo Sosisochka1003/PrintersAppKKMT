@@ -120,7 +120,16 @@ namespace PrintersApp.Pages
 
         private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
-            if (TextBoxName.Text == "" ||  TextBoxInventoryNumber.Text == "" || TextBoxRoom.Text == "" || ComboBoxLocation.Text == "Расположение")
+            bool isChecked = false;
+            foreach (CartridgeWithBool item in ComboBoxCompabilityCartridges.Items)
+            {
+                if (item.isSelected == true)
+                {
+                    isChecked = true;
+                }
+            }
+
+            if (TextBoxName.Text == "" ||  TextBoxInventoryNumber.Text == "" || TextBoxRoom.Text == "" || ComboBoxLocation.Text == "Расположение" || !isChecked)
             {
                 MessageBox.Show("Неверное заполнение данных");
                 return;

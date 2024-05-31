@@ -33,6 +33,11 @@
                     <Frame x:Name="FrameReports" />
                 </TabItem.Content>
             </TabItem>
+            <TabItem x:Name="TabItemWorkStation" Header="Рабочие станции" IsEnabled="True">
+                <TabItem.Content>
+                    <Frame x:Name="FrameWorkStation"/>
+                </TabItem.Content>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

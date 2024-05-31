@@ -14,7 +14,7 @@ namespace PrintersApp
 {
     public class ContextDataBase : DbContext
     {
-        public ContextDataBase() 
+        public ContextDataBase()
         {
             try
             {
@@ -26,7 +26,7 @@ namespace PrintersApp
                 System.Windows.Application.Current.Shutdown();
             }
         }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -45,6 +45,11 @@ namespace PrintersApp
         public DbSet<Printer> Printers { get; set; }
         public DbSet<Comming> Commings { get; set; }
         public DbSet<Shipment> Shipments { get; set; }
+        public DbSet<Projector> Projectors { get; set; }
+        public DbSet<ProjectorsInRoom> ProjectorsInRooms { get; set; }
+        public DbSet<WorkStation> WorkStations { get; set; }
+        public DbSet<WorkStationsInRoom> WorkStationsInRooms { get; set; }
+        public DbSet<RepairSession> RepairSessions { get; set; }
 
         public enum VarLocation
         {
@@ -106,7 +111,7 @@ namespace PrintersApp
             [ForeignKey(nameof(Cartridge))]
             public int CartridgeId { get; set; }
             public required Cartridge CartridgeObject { get; set; }
-            public DateTime ShipmentDate { get; set;}
+            public DateTime ShipmentDate { get; set; }
         }
 
         public class PrinterCartridge
@@ -119,6 +124,81 @@ namespace PrintersApp
             [ForeignKey(nameof(Cartridge))]
             public int CartridgeId { get; set; }
             public required Cartridge Cartridge { get; set; }
+        }
+
+        public class Projector
+        {
+            [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int Id { get; set; }
+            public string Model { get; set; }
+            public VarLocation Location { get; set; }
+            public int InvenrotyNumber { get; set; }
+            public string MileageHours { get; set; }
+        }
+
+        public class ProjectorsInRoom
+        {
+            [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int Id { get; set; }
+            public string Room { get; set; }
+            [ForeignKey(nameof(Projector))]
+            public int ProjectorId { get; set; }
+            public required Projector ProjectorObject { get; set; }
+        }
+
+        public class WorkStation
+        {
+            [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int Id { get; set; }
+            public VarLocation Location { get; set; }
+            public string Brand { get; set; }
+            public string Motherboard { get; set; }
+            public string CPU { get; set; }
+            public string GPU { get; set; }
+            public string RAMName { get; set; }
+            public int RAMVolume { get; set; }
+            [AllowNull]
+            public string ROMSsdName { get; set; }
+            [AllowNull]
+            public int ROMSsdVolume { get; set; }
+            [AllowNull]
+            public string ROMHddName { get; set; }
+            [AllowNull]
+            public int ROMHddVolume { get; set; }
+            public string Monitor { get; set; }
+            public string Keyboard { get; set; }
+            public string Mouse { get; set; }
+            [AllowNull]
+            public string UPS { get; set; }
+        }
+
+        public enum Status
+        {
+            Work,
+            NeedRepair,
+            OutOfUse
+        }
+
+        public class WorkStationsInRoom
+        {
+            [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int Id { get; set; }
+            public string Room { get; set; }
+            [ForeignKey(nameof(WorkStation))]
+            public int WorkStationId { get; set; }
+            public WorkStation WorkStationObject { get; set; }
+            public Status WorkStationStatus { get; set; }
+        }
+
+        public class RepairSession
+        {
+            [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+            public int Id { get; set; }
+            [ForeignKey(nameof(WorkStation))]
+            public int WorkStationId { get; set; }
+            public WorkStation WorkStationObject { get; set; }
+            public DateTime DateRepair { get; set; }
+            public string DescriptionRepair { get; set; }
         }
     }
 }

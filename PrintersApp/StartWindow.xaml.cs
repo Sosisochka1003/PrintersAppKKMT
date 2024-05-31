@@ -30,6 +30,7 @@ namespace PrintersApp
             FrameCartridge.Navigate(new CartridgePage(ctx));
             FramePrinters.Navigate(new PrintersPage(ctx));
             FrameReports.Navigate(new ReportsPage(ctx));
+            FrameWorkStation.Navigate(new WorkStationsPage(ctx));
         }
 
         

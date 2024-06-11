@@ -52,11 +52,12 @@ namespace PrintersApp.Windows
             TextBoxUPS.Text = WorkStationObject.UPS;
         }
 
-        private void ButtonSave_Click(object sender, RoutedEventArgs e)
+        private async void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             int SSDVolume = 0;
             int HDDVolume = 0;
             if (ComboBoxLocation.SelectedItem == null ||
+                TextBoxRoom.Text == null ||
                 TextBoxBrand.Text == null ||
                 TextBoxMotherboad.Text == null || 
                 TextBoxCPU.Text == null ||
@@ -97,7 +98,19 @@ namespace PrintersApp.Windows
                     UPS = TextBoxUPS.Text,
                 };
                 ctx.WorkStations.Add(newWorkStation);
-                ctx.SaveChangesAsync();
+                await ctx.SaveChangesAsync();
+
+                var tempWorkStation = ctx.Entry(newWorkStation).Entity;
+
+                ContextDataBase.WorkStationsInRoom workStationsInRoom = new WorkStationsInRoom
+                {
+                    WorkStationId = tempWorkStation.Id,
+                    Room = TextBoxRoom.Text,
+                    WorkStationObject = tempWorkStation,
+                    WorkStationStatus = Status.Work
+                };
+                ctx.WorkStationsInRooms.Add(workStationsInRoom);
+                await ctx.SaveChangesAsync();
                 MessageBox.Show("save");
             }
 

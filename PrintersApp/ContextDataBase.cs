@@ -186,7 +186,7 @@ namespace PrintersApp
             public string Room { get; set; }
             [ForeignKey(nameof(WorkStation))]
             public int WorkStationId { get; set; }
-            public WorkStation WorkStationObject { get; set; }
+            public required WorkStation WorkStationObject { get; set; }
             public Status WorkStationStatus { get; set; }
         }
 

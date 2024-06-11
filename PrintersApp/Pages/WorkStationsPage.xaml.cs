@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using static PrintersApp.ContextDataBase;
 
 namespace PrintersApp.Pages
 {
@@ -22,16 +23,52 @@ namespace PrintersApp.Pages
     public partial class WorkStationsPage : Page
     {
         ContextDataBase ctx;
+        public List<WorkStationsInRoom> WorkStationData{ get; set; } = new List<WorkStationsInRoom>();
         public WorkStationsPage(ContextDataBase ctx)
         {
             InitializeComponent();
             this.ctx = ctx;
+            this.DataContext = new List<WorkStationsInRoom>(ctx.WorkStationsInRooms.ToList());
+            //DataGridWorkStations.ItemsSource = WorkStationData;
+            
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var page = new WorkStation(ctx);
-            page.Show();
+            //var page = new PrintersApp.Windows.WorkStation(ctx);
+            //page.Show();
+            //ContextDataBase.WorkStation test = ctx.WorkStations.First();
+            //ctx.WorkStationsInRooms.Add(new WorkStationsInRoom { Room = "123", WorkStationId = test.Id, WorkStationObject = test, WorkStationStatus = Status.Work });
+            //ctx.SaveChangesAsync();
+            foreach (var item in ctx.WorkStationsInRooms.ToList())
+            {
+                MessageBox.Show($"{item.WorkStationObject.Id} {item.WorkStationObject.CPU}");
+            }
+        }
+
+        private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void ComboBoxFilterLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void ButtonAddElement_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

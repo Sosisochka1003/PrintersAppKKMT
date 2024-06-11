@@ -12,8 +12,8 @@ using PrintersApp;
 namespace PrintersApp.Migrations
 {
     [DbContext(typeof(ContextDataBase))]
-    [Migration("20240325075407_klema12344")]
-    partial class klema12344
+    [Migration("20240610121126_klema")]
+    partial class klema
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -84,8 +84,9 @@ namespace PrintersApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<long>("InventoryNumber")
-                        .HasColumnType("bigint");
+                    b.Property<string>("InventoryNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("Location")
                         .HasColumnType("integer");
@@ -143,6 +144,80 @@ namespace PrintersApp.Migrations
                     b.ToTable("PrinterInRooms", "PrinterApp");
                 });
 
+            modelBuilder.Entity("PrintersApp.ContextDataBase+Projector", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("InvenrotyNumber")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Location")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("MileageHours")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Projectors", "PrinterApp");
+                });
+
+            modelBuilder.Entity("PrintersApp.ContextDataBase+ProjectorsInRoom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProjectorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Room")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectorId");
+
+                    b.ToTable("ProjectorsInRooms", "PrinterApp");
+                });
+
+            modelBuilder.Entity("PrintersApp.ContextDataBase+RepairSession", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateRepair")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DescriptionRepair")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("WorkStationId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkStationId");
+
+                    b.ToTable("RepairSessions", "PrinterApp");
+                });
+
             modelBuilder.Entity("PrintersApp.ContextDataBase+Shipment", b =>
                 {
                     b.Property<int>("Id")
@@ -171,6 +246,100 @@ namespace PrintersApp.Migrations
                     b.HasIndex("PrinterId");
 
                     b.ToTable("Shipments", "PrinterApp");
+                });
+
+            modelBuilder.Entity("PrintersApp.ContextDataBase+WorkStation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("CPU")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("GPU")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Keyboard")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("Location")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Monitor")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Motherboard")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Mouse")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("RAMName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("RAMVolume")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ROMHddName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ROMHddVolume")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ROMSsdName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("ROMSsdVolume")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UPS")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkStations", "PrinterApp");
+                });
+
+            modelBuilder.Entity("PrintersApp.ContextDataBase+WorkStationsInRoom", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Room")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("WorkStationId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("WorkStationStatus")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkStationId");
+
+                    b.ToTable("WorkStationsInRooms", "PrinterApp");
                 });
 
             modelBuilder.Entity("PrintersApp.ContextDataBase+Comming", b =>
@@ -214,6 +383,28 @@ namespace PrintersApp.Migrations
                     b.Navigation("PrinterObject");
                 });
 
+            modelBuilder.Entity("PrintersApp.ContextDataBase+ProjectorsInRoom", b =>
+                {
+                    b.HasOne("PrintersApp.ContextDataBase+Projector", "ProjectorObject")
+                        .WithMany()
+                        .HasForeignKey("ProjectorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ProjectorObject");
+                });
+
+            modelBuilder.Entity("PrintersApp.ContextDataBase+RepairSession", b =>
+                {
+                    b.HasOne("PrintersApp.ContextDataBase+WorkStation", "WorkStationObject")
+                        .WithMany()
+                        .HasForeignKey("WorkStationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkStationObject");
+                });
+
             modelBuilder.Entity("PrintersApp.ContextDataBase+Shipment", b =>
                 {
                     b.HasOne("PrintersApp.ContextDataBase+Cartridge", "CartridgeObject")
@@ -231,6 +422,17 @@ namespace PrintersApp.Migrations
                     b.Navigation("CartridgeObject");
 
                     b.Navigation("PrinterObject");
+                });
+
+            modelBuilder.Entity("PrintersApp.ContextDataBase+WorkStationsInRoom", b =>
+                {
+                    b.HasOne("PrintersApp.ContextDataBase+WorkStation", "WorkStationObject")
+                        .WithMany()
+                        .HasForeignKey("WorkStationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("WorkStationObject");
                 });
 #pragma warning restore 612, 618
         }

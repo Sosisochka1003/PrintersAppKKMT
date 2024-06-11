@@ -42,7 +42,6 @@ namespace PrintersApp.Pages
             ComboBoxFilterLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
             var Cartridges = ctx.Cartridges.Select(c => new CartridgeWithBool { cartridge = c, isSelected = false }).ToList();
             ComboBoxCompabilityCartridges.ItemsSource = Cartridges;
-            var test = ctx.Printers.ToList();
         }
 
         private void ButtonAddElement_Click(object sender, RoutedEventArgs e)

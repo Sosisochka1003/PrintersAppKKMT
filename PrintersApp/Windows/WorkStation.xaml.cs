@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,6 +22,7 @@ namespace PrintersApp.Windows
     public partial class WorkStation : Window
     {
         ContextDataBase ctx;
+        ContextDataBase.WorkStationsInRoom UpdateWorkStationInRoom;
         ContextDataBase.WorkStation UpdateWorkStation;
         public WorkStation(ContextDataBase ctx)
         {
@@ -29,30 +31,32 @@ namespace PrintersApp.Windows
             ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
         }
 
-        public WorkStation(ContextDataBase ctx, ContextDataBase.WorkStation WorkStationObject)
+        public WorkStation(ContextDataBase ctx, ContextDataBase.WorkStationsInRoom WorkStationInRoomObject)
         {
             InitializeComponent();
             this.ctx = ctx;
-            UpdateWorkStation = WorkStationObject;
+            UpdateWorkStationInRoom = WorkStationInRoomObject;
+            UpdateWorkStation = ctx.WorkStations.First(x => x.Id == UpdateWorkStationInRoom.WorkStationId);
             ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
-            ComboBoxLocation.SelectedItem = WorkStationObject.Location;
-            TextBoxBrand.Text = WorkStationObject.Brand;
-            TextBoxMotherboad.Text = WorkStationObject.Motherboard;
-            TextBoxCPU.Text = WorkStationObject.CPU;
-            TextBoxGPU.Text = WorkStationObject.GPU;
-            TextBoxRAMName.Text = WorkStationObject.RAMName;
-            TextBoxRAMVolume.Text = WorkStationObject.RAMVolume.ToString();
-            TextBoxROMSSDName.Text = WorkStationObject.ROMSsdName;
-            TextBoxROMSSDVolume.Text = WorkStationObject.ROMSsdVolume.ToString();
-            TextBoxROMHDDName.Text = WorkStationObject.ROMHddName;
-            TextBoxROMHDDVolume.Text = WorkStationObject.ROMHddVolume.ToString();
-            TextBoxMonitor.Text = WorkStationObject.Monitor;
-            TextBoxKeyboard.Text = WorkStationObject.Keyboard;
-            TextBoxMouse.Text = WorkStationObject.Mouse;
-            TextBoxUPS.Text = WorkStationObject.UPS;
+            ComboBoxLocation.SelectedItem = UpdateWorkStation.Location;
+            TextBoxRoom.Text = UpdateWorkStationInRoom.Room;
+            TextBoxBrand.Text = UpdateWorkStation.Brand;
+            TextBoxMotherboad.Text = UpdateWorkStation.Motherboard;
+            TextBoxCPU.Text = UpdateWorkStation.CPU;
+            TextBoxGPU.Text = UpdateWorkStation.GPU;
+            TextBoxRAMName.Text = UpdateWorkStation.RAMName;
+            TextBoxRAMVolume.Text = UpdateWorkStation.RAMVolume.ToString();
+            TextBoxROMSSDName.Text = UpdateWorkStation.ROMSsdName;
+            TextBoxROMSSDVolume.Text = UpdateWorkStation.ROMSsdVolume.ToString();
+            TextBoxROMHDDName.Text = UpdateWorkStation.ROMHddName;
+            TextBoxROMHDDVolume.Text = UpdateWorkStation.ROMHddVolume.ToString();
+            TextBoxMonitor.Text = UpdateWorkStation.Monitor;
+            TextBoxKeyboard.Text = UpdateWorkStation.Keyboard;
+            TextBoxMouse.Text = UpdateWorkStation.Mouse;
+            TextBoxUPS.Text = UpdateWorkStation.UPS;
         }
 
-        private async void ButtonSave_Click(object sender, RoutedEventArgs e)
+        private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             int SSDVolume = 0;
             int HDDVolume = 0;
@@ -77,7 +81,7 @@ namespace PrintersApp.Windows
                 MessageBox.Show("Неверное заполнение данных");
                 return;
             }
-            if (UpdateWorkStation == null)
+            if (UpdateWorkStationInRoom == null)
             {
                 ContextDataBase.WorkStation newWorkStation = new ContextDataBase.WorkStation
                 {
@@ -98,7 +102,7 @@ namespace PrintersApp.Windows
                     UPS = TextBoxUPS.Text,
                 };
                 ctx.WorkStations.Add(newWorkStation);
-                await ctx.SaveChangesAsync();
+                ctx.SaveChanges();
 
                 var tempWorkStation = ctx.Entry(newWorkStation).Entity;
 
@@ -110,10 +114,41 @@ namespace PrintersApp.Windows
                     WorkStationStatus = Status.Work
                 };
                 ctx.WorkStationsInRooms.Add(workStationsInRoom);
-                await ctx.SaveChangesAsync();
-                MessageBox.Show("save");
+                ctx.SaveChanges();
             }
+            else
+            {
+                UpdateWorkStation.Location = (VarLocation)ComboBoxLocation.SelectedItem;
+                UpdateWorkStation.Brand = TextBoxBrand.Text;
+                UpdateWorkStation.Motherboard = TextBoxMotherboad.Text;
+                UpdateWorkStation.CPU = TextBoxCPU.Text;
+                UpdateWorkStation.GPU = TextBoxGPU.Text;
+                UpdateWorkStation.RAMName = TextBoxRAMName.Text;
+                UpdateWorkStation.RAMVolume = RAMVolume;
+                UpdateWorkStation.ROMSsdName = TextBoxROMSSDName.Text;
+                UpdateWorkStation.ROMSsdVolume = SSDVolume;
+                UpdateWorkStation.ROMHddName = TextBoxROMHDDName.Text;
+                UpdateWorkStation.ROMHddVolume = HDDVolume;
+                UpdateWorkStation.Monitor = TextBoxMonitor.Text;
+                UpdateWorkStation.Keyboard = TextBoxKeyboard.Text;
+                UpdateWorkStation.Mouse = TextBoxMouse.Text;
+                UpdateWorkStation.UPS = TextBoxUPS.Text;
 
+                ctx.WorkStations.Update(UpdateWorkStation);
+                ctx.SaveChanges();
+
+                var tempWorkStation = ctx.Entry(UpdateWorkStation).Entity;
+
+                UpdateWorkStationInRoom.Room = TextBoxRoom.Text;
+                UpdateWorkStationInRoom.WorkStationId = tempWorkStation.Id;
+                UpdateWorkStationInRoom.WorkStationObject = tempWorkStation;
+                UpdateWorkStationInRoom.WorkStationStatus = Status.Work;
+
+                ctx.WorkStationsInRooms.Update(UpdateWorkStationInRoom);
+                ctx.SaveChanges();
+            }
+            MessageBox.Show("save");
+            this.Close();
         }
     }
 }

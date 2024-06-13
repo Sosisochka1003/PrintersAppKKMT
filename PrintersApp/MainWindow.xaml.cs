@@ -18,12 +18,12 @@ namespace PrintersApp
     /// </summary>
     public partial class MainWindow : Window
     {
-        ContextDataBase ctx;
+        //ContextDataBase ctx;
         public MainWindow()
         {
             InitializeComponent();
-            ctx = new ContextDataBase();
-            ctx.Database.Migrate();
+            //ctx = new ContextDataBase();
+            //ctx.Database.Migrate();
         }
 
         private void ButtonPrintes_Click(object sender, RoutedEventArgs e)
@@ -38,35 +38,35 @@ namespace PrintersApp
         {
             //var CartridgesWindow = new Cartridges(ctx);
             //CartridgesWindow.Show();
-            var cartridge = new StartWindow();
-            cartridge.Show();
+            //var cartridge = new StartWindow();
+            //cartridge.Show();
         }
 
         private void ButtonComming_Click(object sender, RoutedEventArgs e)
         {
-            var CartridgeCommingsWindow = new CartridgeComming(ctx);
-            CartridgeCommingsWindow.Show();
+            //var CartridgeCommingsWindow = new CartridgeComming(ctx);
+            //CartridgeCommingsWindow.Show();
         }
 
         private void ButtonShipment_Click(object sender, RoutedEventArgs e)
         {
-            var CartridgeShipmentWindow = new CartridgeShipment(ctx);
-            CartridgeShipmentWindow.Show();
+            //var CartridgeShipmentWindow = new CartridgeShipment(ctx);
+            //CartridgeShipmentWindow.Show();
         }
 
         private void ShipmentReport_Click(object sender, RoutedEventArgs e)
         {
-            ExcelReports.ShipmentReport(ctx);
+            //ExcelReports.ShipmentReport(ctx);
         }
 
         private void CartridgeCountReport_Click(object sender, RoutedEventArgs e)
         {
-            ExcelReports.CartridgeCount(ctx);
+            //ExcelReports.CartridgeCount(ctx);
         }
 
         private void CartridgeCommignReport_Click(object sender, RoutedEventArgs e)
         {
-            ExcelReports.CartridgeComming(ctx);
+            //ExcelReports.CartridgeComming(ctx);
         }
     }
 }

@@ -37,6 +37,10 @@ namespace PrintersApp.Pages
             InitializeComponent();
             this.ctx = ctx;
             Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
+            foreach (var printer in Printers)
+            {
+                printer.PrinterObject = ctx.Printers.First(x => x.Id == printer.PrinterId);
+            }
             DataGridPrinters.ItemsSource = Printers;
             ComboBoxLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
             ComboBoxFilterLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
@@ -117,7 +121,7 @@ namespace PrintersApp.Pages
             searchPrinters();
         }
 
-        private async void ButtonSubmit_Click(object sender, RoutedEventArgs e)
+        private void ButtonSubmit_Click(object sender, RoutedEventArgs e)
         {
             bool isChecked = false;
             foreach (CartridgeWithBool item in ComboBoxCompabilityCartridges.Items)
@@ -156,7 +160,7 @@ namespace PrintersApp.Pages
                             });
                         }
                     }
-                    await ctx.SaveChangesAsync();
+                    ctx.SaveChanges();
                     DataGridPrinters.ItemsSource = Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
                     searchPrinters();
                     GridAddEditElement.Visibility = Visibility.Hidden;
@@ -179,7 +183,7 @@ namespace PrintersApp.Pages
             };
             ctx.Printers.Add(newPrinter);
             ctx.PrinterInRooms.Add(newPrinterInRoom);
-            await ctx.SaveChangesAsync();
+            ctx.SaveChanges();
 
             var tempPrinter = ctx.Entry(newPrinter).Entity;
 
@@ -196,7 +200,7 @@ namespace PrintersApp.Pages
                     });
                 }
             }
-            await ctx.SaveChangesAsync();
+            ctx.SaveChanges();
             DataGridPrinters.ItemsSource = Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
             searchPrinters();
             GridAddEditElement.Visibility = Visibility.Hidden;
@@ -241,6 +245,11 @@ namespace PrintersApp.Pages
                     searchPrinters();
                     break;
             }
+        }
+
+        private void test_Checked(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show($"{ctx.PrinterInRooms.First().Room} {ctx.PrinterInRooms.First().PrinterObject.Name}");
         }
     }
 }

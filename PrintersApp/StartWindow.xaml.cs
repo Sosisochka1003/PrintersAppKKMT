@@ -31,7 +31,6 @@ namespace PrintersApp
             FramePrinters.Navigate(new PrintersPage(ctx));
             FrameReports.Navigate(new ReportsPage(ctx));
             FrameWorkStation.Navigate(new WorkStationsPage(ctx));
-            MessageBox.Show(ctx.WorkStationsInRooms.First().WorkStationObject.Brand);
         }
 
         

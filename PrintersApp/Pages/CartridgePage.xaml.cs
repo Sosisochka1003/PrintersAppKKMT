@@ -313,7 +313,7 @@ namespace PrintersApp.Pages
             if (selectedPrinter != null)
             {
                 ComboBoxShipmentCartridge.ItemsSource = ctx.PrinterCartridges.Where(x => x.Printer == selectedPrinter.PrinterObject).ToList();
-                ComboBoxShipmentCartridge.SelectedItem = ComboBoxShipmentCartridge.Items[0];
+                ComboBoxShipmentCartridge.SelectedItem = ComboBoxShipmentCartridge.Items.IndexOf(0);
             }
             
 

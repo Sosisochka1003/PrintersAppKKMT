@@ -28,22 +28,23 @@ namespace PrintersApp.Pages
         {
             InitializeComponent();
             this.ctx = ctx;
-            this.DataContext = new List<WorkStationsInRoom>(ctx.WorkStationsInRooms.ToList());
-            //DataGridWorkStations.ItemsSource = WorkStationData;
-            
+            WorkStationData = new List<WorkStationsInRoom>(ctx.WorkStationsInRooms.ToList());
+            foreach (var data in WorkStationData)
+            {
+                data.WorkStationObject = ctx.WorkStations.First(x => x.Id == data.WorkStationId);
+            }
+            DataGridWorkStations.ItemsSource = WorkStationData;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //var page = new PrintersApp.Windows.WorkStation(ctx);
-            //page.Show();
             //ContextDataBase.WorkStation test = ctx.WorkStations.First();
             //ctx.WorkStationsInRooms.Add(new WorkStationsInRoom { Room = "123", WorkStationId = test.Id, WorkStationObject = test, WorkStationStatus = Status.Work });
             //ctx.SaveChangesAsync();
-            foreach (var item in ctx.WorkStationsInRooms.ToList())
-            {
-                MessageBox.Show($"{item.WorkStationObject.Id} {item.WorkStationObject.CPU}");
-            }
+            //foreach (var item in ctx.WorkStationsInRooms.ToList())
+            //{
+            //    MessageBox.Show($"{item.WorkStationObject.Id} {item.WorkStationObject.CPU}");
+            //}
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
@@ -58,12 +59,14 @@ namespace PrintersApp.Pages
 
         private void ButtonAddElement_Click(object sender, RoutedEventArgs e)
         {
-
+            var page = new PrintersApp.Windows.WorkStation(ctx);
+            page.Show();
         }
 
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
-
+            var page = new PrintersApp.Windows.WorkStation(ctx, DataGridWorkStations.SelectedItem as WorkStationsInRoom);
+            page.Show();
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)

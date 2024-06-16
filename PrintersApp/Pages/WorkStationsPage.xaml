@@ -8,10 +8,10 @@
     Title="WorkStationsPage"
     d:DesignHeight="450"
     d:DesignWidth="800"
+    KeyDown="Page_KeyDown"
     mc:Ignorable="d">
 
     <Grid Background="White">
-        <Button Click="Button_Click" Content="test" />
         <StackPanel Margin="3,3,3,3">
             <StackPanel Orientation="Horizontal">
                 <TextBox
@@ -37,10 +37,15 @@
             <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
                 <DataGrid
                     x:Name="DataGridWorkStations"
+                    Height="340"
                     AutoGenerateColumns="False"
                     CanUserReorderColumns="False"
                     CanUserSortColumns="True"
-                    IsReadOnly="True">
+                    IsReadOnly="True"
+                    ScrollViewer.CanContentScroll="True"
+                    ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible"
+                    VerticalScrollBarVisibility="Visible">
                     <DataGrid.ContextMenu>
                         <ContextMenu>
                             <MenuItem

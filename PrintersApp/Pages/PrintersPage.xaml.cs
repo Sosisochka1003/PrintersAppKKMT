@@ -149,6 +149,7 @@ namespace PrintersApp.Pages
                 ctx.PrinterCartridges.RemoveRange(ctx.PrinterCartridges.Where(p => p.Printer == pickPrinter.PrinterObject).ToList());
                 if (updatePrinter != null && updateRoom != null)
                 {
+                    updateRoom.Room = TextBoxRoom.Text;
                     updatePrinter.Name = TextBoxName.Text;
                     updatePrinter.InventoryNumber = TextBoxInventoryNumber.Text;
                     updatePrinter.Location = (VarLocation)ComboBoxLocation.SelectedItem;
@@ -252,9 +253,6 @@ namespace PrintersApp.Pages
             }
         }
 
-        private void test_Checked(object sender, RoutedEventArgs e)
-        {
-            //MessageBox.Show($"{ctx.PrinterInRooms.First().Room} {ctx.PrinterInRooms.First().PrinterObject.Name}");
-        }
+        
     }
 }

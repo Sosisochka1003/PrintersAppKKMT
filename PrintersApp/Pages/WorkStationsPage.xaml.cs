@@ -38,11 +38,12 @@ namespace PrintersApp.Pages
                 data.WorkStationObject = ctx.WorkStations.First(x => x.Id == data.WorkStationId);
             }
             DataGridWorkStations.ItemsSource = WorkStationData;
+            ComboBoxFilterLocation.ItemsSource = Enum.GetValues(typeof(VarLocation)).Cast<VarLocation>();
         }
 
         private void searchPrinters()
         {
-            string param = TextBoxSearch.Text.ToLower();
+            string param = TextBoxSearch.Text.ToLower().ToString();
             if (param == "" || param == "поиск")
             {
                 DataGridWorkStations.ItemsSource = currentLocation == VarLocation.Общий ? WorkStationData : WorkStationData.Where(c => c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()));
@@ -50,7 +51,14 @@ namespace PrintersApp.Pages
             }
             DataGridWorkStations.ItemsSource = currentLocation == VarLocation.Общий ?
                                                     WorkStationData.Where(c => c.WorkStationObject.Id.ToString() == param ||
-                                                                    c.WorkStationObject.Brand.ToLower().Contains(param))
+                                                                    c.WorkStationObject.Brand.ToLower().Contains(param) ||
+                                                                    c.Room.ToString().ToLower().Contains(param) ||
+                                                                    c.WorkStationObject.Motherboard.ToString().ToLower().Contains(param) ||
+                                                                    c.WorkStationObject.CPU.ToString().ToLower().Contains(param) ||
+                                                                    c.WorkStationObject.GPU.ToString().ToLower().Contains(param) ||
+                                                                    c.WorkStationObject.RAMVolume.ToString() == param ||
+                                                                    c.WorkStationObject.ROMSsdVolume.ToString() == param ||
+                                                                    c.WorkStationObject.ROMHddVolume.ToString() == param)
             :
                                                     WorkStationData.Where(c => c.WorkStationObject.Id.ToString().Contains(param) &&
                                                                     c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
@@ -64,17 +72,12 @@ namespace PrintersApp.Pages
                                                                     c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
                                                                     c.WorkStationObject.GPU.ToString().ToLower().Contains(param) &&
                                                                     c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
-                                                                    c.WorkStationObject.RAMVolume.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.RAMVolume.ToString() == param &&
                                                                     c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
-                                                                    c.WorkStationObject.ROMSsdVolume.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.ROMSsdVolume.ToString() == param &&
                                                                     c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
-                                                                    c.WorkStationObject.ROMHddVolume.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.ROMHddVolume.ToString() == param &&
                                                                     c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()));
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
@@ -139,7 +142,23 @@ namespace PrintersApp.Pages
             ctx.WorkStationsInRooms.Remove(deleteWorkStationInRoom);
             ctx.WorkStations.Remove(ctx.WorkStations.First(c => c.Id == deleteWorkStationInRoom.WorkStationId));
             ctx.SaveChanges();
-            DataGridWorkStations.ItemsSource = 
+            WorkStationData = new List<WorkStationsInRoom>(ctx.WorkStationsInRooms.ToList());
+            foreach (var item in WorkStationData)
+            {
+                item.WorkStationObject = ctx.WorkStations.First(x => x.Id == item.WorkStationId);
+            }
+            DataGridWorkStations.ItemsSource = WorkStationData;
+            searchPrinters();
+        }
+
+
+        private void Page_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F5)
+            {
+                WorkStationData = new List<WorkStationsInRoom>(ctx.WorkStationsInRooms.ToList());
+                DataGridWorkStations.ItemsSource = WorkStationData;
+            }
         }
     }
 }

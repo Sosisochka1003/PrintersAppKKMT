@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Рабочая станция"
     Width="550"
-    Height="650"
+    Height="670"
     mc:Ignorable="d">
     <Grid>
         <StackPanel Margin="5">

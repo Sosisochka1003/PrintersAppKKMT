@@ -1,7 +1,9 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using PrintersApp.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -56,6 +58,7 @@ namespace PrintersApp.Windows
             TextBoxUPS.Text = UpdateWorkStation.UPS;
         }
 
+
         private void ButtonSave_Click(object sender, RoutedEventArgs e)
         {
             int SSDVolume = 0;
@@ -76,7 +79,7 @@ namespace PrintersApp.Windows
                 MessageBox.Show("Некорректное заполнение данных");
                 return;
             }
-            if (!Int32.TryParse(TextBoxROMSSDVolume.Text, out SSDVolume) || !Int32.TryParse(TextBoxROMHDDVolume.Text, out HDDVolume))
+            if (!Int32.TryParse(TextBoxROMSSDVolume.Text, out SSDVolume) && Int32.TryParse(TextBoxROMHDDVolume.Text, out HDDVolume) || Int32.TryParse(TextBoxROMSSDVolume.Text, out SSDVolume) && !Int32.TryParse(TextBoxROMHDDVolume.Text, out HDDVolume))
             {
                 MessageBox.Show("Неверное заполнение данных");
                 return;
@@ -150,5 +153,6 @@ namespace PrintersApp.Windows
             MessageBox.Show("save");
             this.Close();
         }
+
     }
 }

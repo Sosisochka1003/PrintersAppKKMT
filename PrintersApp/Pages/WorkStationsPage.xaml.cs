@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,7 +24,10 @@ namespace PrintersApp.Pages
     public partial class WorkStationsPage : Page
     {
         ContextDataBase ctx;
+
         public List<WorkStationsInRoom> WorkStationData{ get; set; } = new List<WorkStationsInRoom>();
+        
+        public VarLocation currentLocation;
         public WorkStationsPage(ContextDataBase ctx)
         {
             InitializeComponent();
@@ -36,25 +40,77 @@ namespace PrintersApp.Pages
             DataGridWorkStations.ItemsSource = WorkStationData;
         }
 
+        private void searchPrinters()
+        {
+            string param = TextBoxSearch.Text.ToLower();
+            if (param == "" || param == "поиск")
+            {
+                DataGridWorkStations.ItemsSource = currentLocation == VarLocation.Общий ? WorkStationData : WorkStationData.Where(c => c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()));
+                return;
+            }
+            DataGridWorkStations.ItemsSource = currentLocation == VarLocation.Общий ?
+                                                    WorkStationData.Where(c => c.WorkStationObject.Id.ToString() == param ||
+                                                                    c.WorkStationObject.Brand.ToLower().Contains(param))
+            :
+                                                    WorkStationData.Where(c => c.WorkStationObject.Id.ToString().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.WorkStationObject.Brand.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.Room.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.WorkStationObject.Motherboard.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.WorkStationObject.CPU.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.WorkStationObject.GPU.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.WorkStationObject.RAMVolume.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.WorkStationObject.ROMSsdVolume.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()) ||
+                                                                    c.WorkStationObject.ROMHddVolume.ToString().ToLower().Contains(param) &&
+                                                                    c.WorkStationObject.Location.ToString().ToLower().Contains(currentLocation.ToString().ToLower()));
+        }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            //ContextDataBase.WorkStation test = ctx.WorkStations.First();
-            //ctx.WorkStationsInRooms.Add(new WorkStationsInRoom { Room = "123", WorkStationId = test.Id, WorkStationObject = test, WorkStationStatus = Status.Work });
-            //ctx.SaveChangesAsync();
-            //foreach (var item in ctx.WorkStationsInRooms.ToList())
-            //{
-            //    MessageBox.Show($"{item.WorkStationObject.Id} {item.WorkStationObject.CPU}");
-            //}
+            
         }
 
         private void TextBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            searchPrinters();
         }
 
         private void ComboBoxFilterLocation_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            switch (ComboBoxFilterLocation.SelectedValue.ToString())
+            {
+                case "Первый":
+                    currentLocation = VarLocation.Первый;
+                    searchPrinters();
+                    break;
+                case "Второй":
+                    currentLocation = VarLocation.Второй;
+                    searchPrinters();
+                    break;
+                case "ККМТ":
+                    currentLocation = VarLocation.ККМТ;
+                    searchPrinters();
+                    break;
+                case "ТТД":
+                    currentLocation = VarLocation.ТТД;
+                    searchPrinters();
+                    break;
+                case "Общий":
+                    currentLocation = VarLocation.Общий;
+                    searchPrinters();
+                    break;
+                default:
+                    currentLocation = VarLocation.Первый;
+                    searchPrinters();
+                    break;
+            }
         }
 
         private void ButtonAddElement_Click(object sender, RoutedEventArgs e)
@@ -65,13 +121,25 @@ namespace PrintersApp.Pages
 
         private void MenuItemEdit_Click(object sender, RoutedEventArgs e)
         {
+            if (DataGridWorkStations.SelectedItem as WorkStationsInRoom == null)
+            {
+                return;
+            }
             var page = new PrintersApp.Windows.WorkStation(ctx, DataGridWorkStations.SelectedItem as WorkStationsInRoom);
             page.Show();
         }
 
         private void MenuItemDelete_Click(object sender, RoutedEventArgs e)
         {
-
+            if (DataGridWorkStations.SelectedItem as WorkStationsInRoom == null)
+            {
+                return;
+            }
+            WorkStationsInRoom deleteWorkStationInRoom = DataGridWorkStations.SelectedItem as WorkStationsInRoom;
+            ctx.WorkStationsInRooms.Remove(deleteWorkStationInRoom);
+            ctx.WorkStations.Remove(ctx.WorkStations.First(c => c.Id == deleteWorkStationInRoom.WorkStationId));
+            ctx.SaveChanges();
+            DataGridWorkStations.ItemsSource = 
         }
     }
 }

@@ -254,7 +254,7 @@ namespace PrintersApp.Pages
 
         private void test_Checked(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show($"{ctx.PrinterInRooms.First().Room} {ctx.PrinterInRooms.First().PrinterObject.Name}");
+            //MessageBox.Show($"{ctx.PrinterInRooms.First().Room} {ctx.PrinterInRooms.First().PrinterObject.Name}");
         }
     }
 }

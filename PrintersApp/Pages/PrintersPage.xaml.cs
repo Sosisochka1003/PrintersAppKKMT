@@ -90,7 +90,12 @@ namespace PrintersApp.Pages
             ctx.PrinterInRooms.Remove(deletePrinter);
             ctx.Printers.Remove(ctx.Printers.FirstOrDefault(x => x.Id == deletePrinter.PrinterId));
             await ctx.SaveChangesAsync();
-            DataGridPrinters.ItemsSource = Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
+            Printers = new List<PrinterInRoom>(ctx.PrinterInRooms.ToList());
+            foreach (var item in Printers)
+            {
+                item.PrinterObject = ctx.Printers.First(x => x.Id == item.PrinterId);
+            }
+            DataGridPrinters.ItemsSource = Printers;
             searchPrinters();
         }
 

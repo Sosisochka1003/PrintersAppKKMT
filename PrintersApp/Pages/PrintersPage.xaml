@@ -29,7 +29,11 @@
                     SelectedIndex="4"
                     SelectionChanged="ComboBoxFilterLocation_SelectionChanged"
                     Text="Расположение" />
-                <CheckBox x:Name="test" Checked="test_Checked" Margin="0,0,5,0" Content="Фильтр 1" />
+                <CheckBox
+                    x:Name="test"
+                    Margin="0,0,5,0"
+                    Checked="test_Checked"
+                    Content="Фильтр 1" />
                 <Button
                     x:Name="ButtonAddElement"
                     Click="ButtonAddElement_Click"
@@ -77,7 +81,7 @@
                     </DataGrid.Columns>
                 </DataGrid>
                 <Grid x:Name="GridAddEditElement" Visibility="Hidden">
-                    <StackPanel Width="200" Margin="10,0,0,0">
+                    <StackPanel Width="220" Margin="10,0,0,0">
                         <TextBox
                             x:Name="TextBoxName"
                             Margin="0,0,0,5"
@@ -107,6 +111,7 @@
                             Text="Расположение" />
                         <ComboBox
                             x:Name="ComboBoxCompabilityCartridges"
+                            Width="220"
                             Margin="0,0,0,5"
                             IsEditable="True"
                             IsReadOnly="True"

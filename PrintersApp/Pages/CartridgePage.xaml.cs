@@ -174,7 +174,7 @@ namespace PrintersApp.Pages
             if (GridShipmentCartridge.Visibility == Visibility.Hidden)
             {
                 GridShipmentCartridge.Visibility = Visibility.Visible;
-                MessageBox.Show("Порядок заполнения: Кабинет => Расположение => Принтер \nВ другом порядке всё может сломается", "Alert");
+                //MessageBox.Show("Порядок заполнения: Кабинет => Расположение => Принтер \nВ другом порядке всё может сломается", "Alert");
             }
             else if (GridShipmentCartridge.Visibility == Visibility.Visible)
             {
@@ -241,6 +241,12 @@ namespace PrintersApp.Pages
             if (ComboBoxShipmentCartridge != null)
             {
                 ComboBoxShipmentCartridge.IsEnabled = true;
+                List<PrinterCartridge> temp = new List<PrinterCartridge>();
+                foreach (var item in ctx.Cartridges.ToList())
+                {
+                    temp.Add(new PrinterCartridge { CartridgeId = item.Id, Cartridge = item, Printer = new Printer { InventoryNumber = "111", Name = "asd" } });
+                }
+                ComboBoxShipmentCartridge.ItemsSource = temp;
                 //ComboBoxShipmentCartridge.ItemsSource = ctx.Cartridges.ToList();
             }
         }
@@ -301,7 +307,7 @@ namespace PrintersApp.Pages
             }
             catch (Exception)
             {
-                MessageBox.Show("нету принтера в выбранном корпусе", "Alert");
+                //MessageBox.Show("нету принтера в выбранном корпусе", "Alert");
                 return;
                 //throw;
             }
@@ -313,7 +319,7 @@ namespace PrintersApp.Pages
             if (selectedPrinter != null)
             {
                 ComboBoxShipmentCartridge.ItemsSource = ctx.PrinterCartridges.Where(x => x.Printer == selectedPrinter.PrinterObject).ToList();
-                ComboBoxShipmentCartridge.SelectedItem = ComboBoxShipmentCartridge.Items.IndexOf(0);
+                ComboBoxShipmentCartridge.SelectedItem = ComboBoxShipmentCartridge.Items[0];
             }
             
 
